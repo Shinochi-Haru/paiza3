@@ -21,9 +21,14 @@ class Program
                 // POP
                 Console.WriteLine(queue.Dequeue());
             }
-            foreach (char c in queue)
+            //foreach (char c in queue)
+            //{
+            //    Console.Write(c + " ");
+            //}
+            //Console.WriteLine();
+            for(int j = 0; j < q; j++)
             {
-                Console.Write(c + " ");
+                Console.WriteLine(query);
             }
             Console.WriteLine();
         }
