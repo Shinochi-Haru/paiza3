@@ -6,27 +6,43 @@ class Program
     static void Main()
     {
         int q = int.Parse(Console.ReadLine());
-        Queue<char> queue = new Queue<char>();
+        Queue<int> queue1 = new Queue<int>();
+        Queue<int> queue2 = new Queue<int>();
         for (int i = 0; i < q; i++)
         {
             string[] query = Console.ReadLine().Split();
             if (query[0] == "1")
             {
                 // PUSH
-                char x = char.Parse(query[1]);
-                queue.Enqueue(x);
+                int k = int.Parse(query[1]);
+                int x = int.Parse(query[2]);
+                if (k == 1)
+                {
+                    queue1.Enqueue(x);
+                }
+                else if (k == 2)
+                {
+                    queue2.Enqueue(x);
+                }
             }
             else if (query[0] == "2")
             {
                 // POP
-                Console.WriteLine(queue);
-                queue.Dequeue();
+                int k = int.Parse(query[1]);
+                if (k == 1)
+                {
+                    Console.WriteLine(queue1.Dequeue());
+                }
+                else if (k == 2)
+                {
+                    Console.WriteLine(queue2.Dequeue());
+                }
             }
-            foreach (char c in queue)
+            else if (query[0] == "3")
             {
-                Console.Write(c + " ");
+                // SIZE
+                Console.WriteLine(queue1.Count + " " + queue2.Count);
             }
-            Console.WriteLine();
         }
     }
 }
