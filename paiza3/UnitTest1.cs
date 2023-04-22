@@ -19,16 +19,12 @@ class Program
             else if (query[0] == "2")
             {
                 // POP
-                Console.WriteLine(queue.Dequeue());
+                Console.WriteLine(queue);
+                queue.Dequeue();
             }
-            //foreach (char c in queue)
-            //{
-            //    Console.Write(c + " ");
-            //}
-            //Console.WriteLine();
-            for(int j = 0; j < q; j++)
+            foreach (char c in queue)
             {
-                Console.WriteLine(query);
+                Console.Write(c + " ");
             }
             Console.WriteLine();
         }
