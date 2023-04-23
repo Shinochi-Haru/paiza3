@@ -1,33 +1,55 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 class Program
 {
     static void Main()
     {
-        string[] nx = Console.ReadLine().Split();
-        int n = int.Parse(nx[0]);
-        int x = int.Parse(nx[1]);
-        var a = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        Queue<int> queue = new Queue<int>();
-        int sum = 0;         // 区間の和
-        int max_sum = 0;     // 区間の和の最大
-        int left_num = -1;   // 区間の和が最大になる左端の値
-        for (int i = 0; i < n; i++)
+        // 逆ポーランド記法の式を入力
+        string input = Console.ReadLine();
+
+        // スタックを用意
+        var stack = new Stack<int>();
+
+        // 入力された式をスペースで分割して配列に変換
+        string[] tokens = input.Split(' ');
+
+        foreach (string token in tokens)
         {
-            sum += a[i];
-            queue.Enqueue(a[i]);
-            if (queue.Count == x)
+            int num;
+            if (int.TryParse(token, out num))
             {
-                if (sum > max_sum)
+                // トークンが数値の場合はスタックに積む
+                stack.Push(num);
+            }
+            else
+            {
+                // トークンが演算子の場合はスタックから2つ取り出して計算
+                int operand2 = stack.Pop();
+                int operand1 = stack.Pop();
+
+                switch (token)
                 {
-                    left_num = queue.Peek();
-                    max_sum = sum;
+                    case "+":
+                        stack.Push(operand1 + operand2);
+                        break;
+                    case "-":
+                        stack.Push(operand1 - operand2);
+                        break;
+                    case "*":
+                        stack.Push(operand1 * operand2);
+                        break;
+                    case "/":
+                        stack.Push(operand1 / operand2);
+                        break;
+                    default:
+                        Console.WriteLine("不正な演算子です。");
+                        return;
                 }
-                sum -= queue.Dequeue();
             }
         }
-        Console.WriteLine(max_sum + " " + left_num);
+
+        // 計算結果を出力
+        Console.WriteLine("計算結果は {0} です。", stack.Pop());
     }
 }
