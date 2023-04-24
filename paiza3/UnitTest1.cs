@@ -1,31 +1,38 @@
 using System;
 using System.Collections.Generic;
 
-class Program
+class MainClass
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
-        int n = int.Parse(Console.ReadLine());
-        string s = Console.ReadLine();
-        Stack<char> st = new Stack<char>();
-        for (int i = 0; i < n; i++)
+        string[] input = Console.ReadLine().Split();
+        int n = int.Parse(input[0]);
+        int k = int.Parse(input[1]);
+        int[] a = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+
+        Queue<int> que = new Queue<int>();
+        int next_person = 0;
+        int person_on_escalator = 0;
+        for (int time = 1; time < 50000; time++)
         {
-            if (st.Count > 0 && st.Peek() == '(' && s[i] == ')')
+            if (next_person < n && time == a[next_person])
             {
-                st.Pop();
+                que.Enqueue(1);
+                person_on_escalator++;
             }
             else
             {
-                st.Push(s[i]);
+                que.Enqueue(0);
             }
-        }
-        if (st.Count == 0)
-        {
-            Console.WriteLine("Yes");
-        }
-        else
-        {
-            Console.WriteLine("No");
+            if (que.Count > k)
+            {
+                person_on_escalator -= que.Dequeue();
+            }
+            if (next_person < n && time == a[next_person])
+            {
+                Console.WriteLine(person_on_escalator);
+                next_person++;
+            }
         }
     }
 }
