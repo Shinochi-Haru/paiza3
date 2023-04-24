@@ -1,38 +1,33 @@
 using System;
-using System.Collections.Generic;
 
 class MainClass
 {
     public static void Main(string[] args)
     {
-        string[] input = Console.ReadLine().Split();
-        int n = int.Parse(input[0]);
-        int k = int.Parse(input[1]);
-        int[] a = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+        int n = int.Parse(Console.ReadLine());
+        int[] a = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse);
 
-        Queue<int> que = new Queue<int>();
-        int next_person = 0;
-        int person_on_escalator = 0;
-        for (int time = 1; time < 50000; time++)
+        int[] b = new int[n];
+        for (int i = 0; i < n; i++)
         {
-            if (next_person < n && time == a[next_person])
+            b[i] = a[i];
+        }
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (i != n - 1)
             {
-                que.Enqueue(1);
-                person_on_escalator++;
+                Console.Write(" ");
             }
-            else
+            Console.Write(b[i]);
+            if (i > 0)
             {
-                que.Enqueue(0);
-            }
-            if (que.Count > k)
-            {
-                person_on_escalator -= que.Dequeue();
-            }
-            if (next_person < n && time == a[next_person])
-            {
-                Console.WriteLine(person_on_escalator);
-                next_person++;
+                for (int j = 0; j < i; j++)
+                {
+                    b[j] *= 2;
+                }
             }
         }
+        Console.WriteLine();
     }
 }
