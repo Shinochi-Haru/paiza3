@@ -3,53 +3,29 @@ using System.Collections.Generic;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        // 逆ポーランド記法の式を入力
-        string input = Console.ReadLine();
-
-        // スタックを用意
-        var stack = new Stack<int>();
-
-        // 入力された式をスペースで分割して配列に変換
-        string[] tokens = input.Split(' ');
-
-        foreach (string token in tokens)
+        int n = int.Parse(Console.ReadLine());
+        string s = Console.ReadLine();
+        Stack<char> st = new Stack<char>();
+        for (int i = 0; i < n; i++)
         {
-            int num;
-            if (int.TryParse(token, out num))
+            if (st.Count > 0 && st.Peek() == '(' && s[i] == ')')
             {
-                // トークンが数値の場合はスタックに積む
-                stack.Push(num);
+                st.Pop();
             }
             else
             {
-                // トークンが演算子の場合はスタックから2つ取り出して計算
-                int operand2 = stack.Pop();
-                int operand1 = stack.Pop();
-
-                switch (token)
-                {
-                    case "+":
-                        stack.Push(operand1 + operand2);
-                        break;
-                    case "-":
-                        stack.Push(operand1 - operand2);
-                        break;
-                    case "*":
-                        stack.Push(operand1 * operand2);
-                        break;
-                    case "/":
-                        stack.Push(operand1 / operand2);
-                        break;
-                    default:
-                        Console.WriteLine("不正な演算子です。");
-                        return;
-                }
+                st.Push(s[i]);
             }
         }
-
-        // 計算結果を出力
-        Console.WriteLine("計算結果は {0} です。", stack.Pop());
+        if (st.Count == 0)
+        {
+            Console.WriteLine("Yes");
+        }
+        else
+        {
+            Console.WriteLine("No");
+        }
     }
 }
