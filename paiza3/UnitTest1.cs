@@ -1,33 +1,38 @@
 using System;
+using System.Collections.Generic;
 
-class MainClass
+class Program
 {
-    public static void Main(string[] args)
+    static void Main()
     {
         int n = int.Parse(Console.ReadLine());
-        int[] a = Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse);
-
-        int[] b = new int[n];
+        Stack<int> st = new Stack<int>();
         for (int i = 0; i < n; i++)
         {
-            b[i] = a[i];
-        }
-
-        for (int i = n - 1; i >= 0; i--)
-        {
-            if (i != n - 1)
+            int a = int.Parse(Console.ReadLine());
+            st.Push(a);
+            while (st.Count >= 2)
             {
-                Console.Write(" ");
-            }
-            Console.Write(b[i]);
-            if (i > 0)
-            {
-                for (int j = 0; j < i; j++)
+                int top1 = st.Peek(); // スタックの上から一番目
+                st.Pop();
+                int top2 = st.Peek(); // スタックの上から二番目
+                st.Pop();
+                if (top1 == top2)
                 {
-                    b[j] *= 2;
+                    st.Push(2 * top2);
+                }
+                else
+                {
+                    st.Push(top2);
+                    st.Push(top1);
+                    break;
                 }
             }
         }
-        Console.WriteLine();
+        while (st.Count > 0)
+        {
+            Console.WriteLine(st.Peek());
+            st.Pop();
+        }
     }
 }
