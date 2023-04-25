@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 class Program
 {
@@ -22,11 +23,16 @@ class Program
                 Console.WriteLine(queue.Dequeue());
             }
 
+            // 連結用のStringBuilderを用意する
+            StringBuilder sb = new StringBuilder();
             foreach (char c in queue)
             {
-                Console.Write(String.Join(" " , c));
+                // 文字列を連結する
+                sb.Append(c);
+                sb.Append(' ');
             }
-            Console.WriteLine();
+            // 最後に空白を除去して、文字列に変換して出力する
+            Console.WriteLine(sb.ToString().TrimEnd());
         }
     }
 }
