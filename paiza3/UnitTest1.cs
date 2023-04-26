@@ -2,21 +2,22 @@ using System;
 
 class Program
 {
-    static void Main1(string[] args)
+    static void Main(string[] args)
     {
-        int[] numArray = new int [] { 7, 1, 3, 4, 2 };
-
-        for(int i = 1; i < numArray.Length; i++)
+        int[] numArray = new int[] { 7, 1, 3, 4, 2 };
+        for (int i = 1; i < numArray.Length; i++)
         {
             int sort = numArray[i];
-
-            if(sort < numArray[i - 1])
+            int j = i - 1;
+            while (j >= 0 && numArray[j] > sort)
             {
-                numArray[i - 1] = sort;
+                numArray[j + 1] = numArray[j];
+                j--;
             }
+            numArray[j + 1] = sort;
         }
 
-        for(int i = 0; i < numArray.Length; i++)
+        for (int i = 0; i < numArray.Length; i++)
         {
             Console.WriteLine(numArray[i]);
         }
