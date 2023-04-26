@@ -1,25 +1,24 @@
 using System;
-using System.Collections.Generic;
 
 class Program
 {
-    static void Main()
+    static void Main1(string[] args)
     {
-        var num = int.Parse(Console.ReadLine());
-        Stack<int> numsStack = new Stack<int>();
-        Console.WriteLine(num);
+        int[] numArray = new int [] { 7, 1, 3, 4, 2 };
 
-        for (int i = 0; i < num; i++)
+        for(int i = 1; i < numArray.Length; i++)
         {
-            int numValue = int.Parse(Console.ReadLine());
-            numsStack.Push(numValue);
-            numValue = numsStack.Pop();
-            Console.WriteLine(numValue);
+            int sort = numArray[i];
+
+            if(sort < numArray[i - 1])
+            {
+                numArray[i - 1] = sort;
+            }
         }
 
-        //while (numsStack.Count > 0)
-        //{
-            
-        //}
+        for(int i = 0; i < numArray.Length; i++)
+        {
+            Console.WriteLine(numArray[i]);
+        }
     }
 }
