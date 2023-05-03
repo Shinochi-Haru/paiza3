@@ -4,9 +4,15 @@ class Program
 {
     static void Main()
     {
-        int n, a = 2, fermat = 1;
+        int a = 2, fermat = 1;
         bool is_prime = true;
-        n = int.Parse(Console.ReadLine());
+        int num = int.Parse(Console.ReadLine());
+        int n = 0;
+
+        for(int i = 0; i < num; i++)
+        {
+            n = int.Parse(Console.ReadLine());
+        }
 
         if (n % a == 0)
         {
