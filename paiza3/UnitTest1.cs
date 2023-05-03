@@ -1,5 +1,4 @@
 using System;
-
 class Program
 {
     static void Main()
@@ -11,11 +10,11 @@ class Program
 
             if (IsPrime(num))
             {
-                Console.WriteLine("YES");
+                Console.WriteLine("pass");
             }
             else
             {
-                Console.WriteLine("NO");
+                Console.WriteLine("failure");
             }
         }
     }
@@ -26,15 +25,23 @@ class Program
         {
             return false;
         }
-
-        for (int i = 2; i <= Math.Sqrt(num); i++)
+        if (num <= 3)
         {
-            if (num % i == 0)
+            return true;
+        }
+        if (num % 2 == 0 || num % 3 == 0)
+        {
+            return false;
+        }
+        int i = 5;
+        while (i * i <= num)
+        {
+            if (num % i == 0 || num % (i + 2) == 0)
             {
                 return false;
             }
+            i += 6;
         }
-
         return true;
     }
 }
