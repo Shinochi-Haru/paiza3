@@ -4,39 +4,37 @@ class Program
 {
     static void Main()
     {
-        int a = 2, fermat = 1;
-        bool is_prime = true;
-        int num = int.Parse(Console.ReadLine());
-        int n = 0;
-
-        for(int i = 0; i < num; i++)
+        var num1 = int.Parse(Console.ReadLine());
+        for (int i = 0; i < num1; i++)
         {
-            n = int.Parse(Console.ReadLine());
+            var num = int.Parse(Console.ReadLine());
+
+            if (IsPrime(num))
+            {
+                Console.WriteLine("YES");
+            }
+            else
+            {
+                Console.WriteLine("NO");
+            }
         }
+    }
 
-        if (n % a == 0)
+    static bool IsPrime(int num)
+    {
+        if (num <= 1)
         {
-            is_prime = false;
-        }
-
-        for (int i = 0; i < n - 1; i++)
-        {
-            fermat *= a;
-            fermat %= n;
-        }
-
-        if (fermat % n != 1)
-        {
-            is_prime = false;
+            return false;
         }
 
-        if (is_prime)
+        for (int i = 2; i <= Math.Sqrt(num); i++)
         {
-            Console.WriteLine("YES");
+            if (num % i == 0)
+            {
+                return false;
+            }
         }
-        else
-        {
-            Console.WriteLine("NO");
-        }
+
+        return true;
     }
 }
