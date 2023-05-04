@@ -4,23 +4,20 @@ class Program
 {
     static void Main()
     {
-        Console.Write("Enter an integer: ");
-        int n = int.Parse(Console.ReadLine());
+        int num = int.Parse(Console.ReadLine());
 
-        Console.Write($"Prime factors of {n} are: ");
-        int factor = 2;
-        while (n > 1)
+        int ans = 0;
+        for(int i = 0; i < num; i++)
         {
-            if (n % factor == 0)
+            if (num % i == 0)
             {
-                Console.Write($"{factor} ");
-                n /= factor;
+                ans++;
             }
             else
             {
-                factor++;
+                
             }
         }
-        Console.WriteLine();
+        Console.WriteLine(ans);
     }
 }
