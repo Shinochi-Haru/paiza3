@@ -4,10 +4,20 @@ class Program
 {
     static void Main()
     {
-        int num1, num2;
-        num1 = int.Parse(Console.ReadLine());
-        num2 = int.Parse(Console.ReadLine());
-        Console.WriteLine("Å‘åŒö–ñ”: " + GCD(num1, num2));
+        int num = int.Parse(Console.ReadLine());
+        int[] numbers = new int[num];
+        for(int i = 0; i < num; i++)
+        {
+            numbers[i] = int.Parse(Console.ReadLine());
+        }
+
+        int result = numbers[0];
+        for (int i = 1; i < numbers.Length; i++)
+        {
+            result = GCD(result, numbers[i]);
+        }
+
+        Console.WriteLine("The GCD is {0}", result);
     }
 
     static int GCD(int a, int b)
@@ -16,6 +26,9 @@ class Program
         {
             return a;
         }
-        return GCD(b, a % b);
+        else
+        {
+            return GCD(b, a % b);
+        }
     }
 }
