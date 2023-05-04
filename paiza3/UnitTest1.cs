@@ -4,22 +4,18 @@ class Program
 {
     static void Main()
     {
-        int n = int.Parse(Console.ReadLine());
-        int[] intArray = new int[n];
-        int factor = 2;
-        for(int i = 0; i < n; i++)
+        int num1, num2;
+        num1 = int.Parse(Console.ReadLine());
+        num2 = int.Parse(Console.ReadLine());
+        Console.WriteLine("Å‘åŒö–ñ”: " + GCD(num1, num2));
+    }
+
+    static int GCD(int a, int b)
+    {
+        if (b == 0)
         {
-            intArray[i] = int.Parse(Console.ReadLine());
-            if (intArray[i] % factor == 0)
-            {
-                Console.Write($"{factor} ");
-                n /= factor;
-            }
-            else
-            {
-                factor++;
-            }
+            return a;
         }
-        Console.WriteLine();
+        return GCD(b, a % b);
     }
 }
