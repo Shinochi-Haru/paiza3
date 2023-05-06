@@ -4,31 +4,38 @@ class Program
 {
     static void Main()
     {
-        int num = int.Parse(Console.ReadLine());
-        int[] numbers = new int[num];
-        for(int i = 0; i < num; i++)
+        int n = int.Parse(Console.ReadLine());
+        int[] nums = new int[n];
+
+        for (int i = 0; i < n; i++)
         {
-            numbers[i] = int.Parse(Console.ReadLine());
+            nums[i] = int.Parse(Console.ReadLine());
         }
 
-        int result = numbers[0];
-        for (int i = 1; i < numbers.Length; i++)
-        {
-            result = GCD(result, numbers[i]);
-        }
-
-        Console.WriteLine(result);
+        Console.WriteLine(Lcm(nums));
     }
 
-    static int GCD(int a, int b)
+    static int Gcd(int a, int b)
     {
-        if (b == 0)
+        while (b != 0)
         {
-            return a;
+            int tmp = b;
+            b = a % b;
+            a = tmp;
         }
-        else
+        return a;
+    }
+
+    static int Lcm(int[] nums)
+    {
+        int lcm = nums[0];
+
+        for (int i = 1; i < nums.Length; i++)
         {
-            return GCD(b, a % b);
+            int gcd = Gcd(lcm, nums[i]);
+            lcm = lcm * nums[i] / gcd;
         }
+
+        return lcm;
     }
 }
