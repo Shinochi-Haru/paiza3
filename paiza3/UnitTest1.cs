@@ -1,88 +1,59 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
-class Program
+class MainClass
 {
-    static Dictionary<int, int> Factorize(int n)
+    public static void Main(string[] args)
     {
-        var factors = new Dictionary<int, int>();
+        int n, ans1 = 0, ans2 = 0;
+        long multi = 0;
+        n = int.Parse(Console.ReadLine());
 
-        for (int i = 2; i * i <= n; i++)
+        bool[] is_prime = new bool[n + 1];
+        List<long> primes = new List<long>();
+
+        for (int i = 0; i <= n; i++)
         {
-            while (n % i == 0)
-            {
-                if (factors.ContainsKey(i))
-                {
-                    factors[i]++;
-                }
-                else
-                {
-                    factors[i] = 1;
-                }
-
-                n /= i;
-            }
+            is_prime[i] = true;
         }
+        is_prime[0] = false;
+        is_prime[1] = false;
 
-        if (n > 1)
+        for (int i = 2; i <= n; i++)
         {
-            if (factors.ContainsKey(n))
+            if (is_prime[i])
             {
-                factors[n]++;
-            }
-            else
-            {
-                factors[n] = 1;
-            }
-        }
-
-        return factors;
-    }
-
-    static void Main()
-    {
-        int n = int.Parse(Console.ReadLine());
-        int[] numbers = new int[n];
-        for(int i = 0; i < n; i++)
-        {
-            numbers[i] = int.Parse(Console.ReadLine());
-        }
-
-        var factors = Factorize(numbers[0]);
-
-        for (int i = 1; i < n; i++)
-        {
-            var localFactors = Factorize(numbers[i]);
-
-            foreach (var kvp in localFactors)
-            {
-                int factor = kvp.Key;
-                int power = kvp.Value;
-
-                if (factors.ContainsKey(factor))
+                primes.Add(i);
+                for (int j = i * 2; j <= n; j += i)
                 {
-                    factors[factor] = Math.Max(factors[factor], power);
-                }
-                else
-                {
-                    factors[factor] = power;
+                    is_prime[j] = false;
                 }
             }
         }
 
-        long lcm = 1;
-        foreach (var kvp in factors)
+        foreach (long p in primes)
         {
-            int factor = kvp.Key;
-            int power = kvp.Value;
-
-            for (int i = 0; i < power; i++)
+            long other_prime = n - p;
+            if (is_prime[other_prime])
             {
-                lcm *= factor;
+                if (multi < p * other_prime)
+                {
+                    multi = p * other_prime;
+                    ans1 = (int)p;
+                    ans2 = (int)other_prime;
+                }
             }
         }
 
-        Console.WriteLine(lcm);
+        if (ans1 <= ans2)
+        {
+            Console.WriteLine(ans1);
+            Console.WriteLine(ans2);
+        }
+        else
+        {
+            Console.WriteLine(ans2);
+            Console.WriteLine(ans1);
+        }
     }
 }
