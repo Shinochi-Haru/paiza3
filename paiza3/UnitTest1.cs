@@ -17,7 +17,7 @@ class Program
             result = GCD(result, numbers[i]);
         }
 
-        Console.WriteLine("The GCD is {0}", result);
+        Console.WriteLine(result);
     }
 
     static int GCD(int a, int b)
