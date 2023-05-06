@@ -1,41 +1,88 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 class Program
 {
+    static Dictionary<int, int> Factorize(int n)
+    {
+        var factors = new Dictionary<int, int>();
+
+        for (int i = 2; i * i <= n; i++)
+        {
+            while (n % i == 0)
+            {
+                if (factors.ContainsKey(i))
+                {
+                    factors[i]++;
+                }
+                else
+                {
+                    factors[i] = 1;
+                }
+
+                n /= i;
+            }
+        }
+
+        if (n > 1)
+        {
+            if (factors.ContainsKey(n))
+            {
+                factors[n]++;
+            }
+            else
+            {
+                factors[n] = 1;
+            }
+        }
+
+        return factors;
+    }
+
     static void Main()
     {
         int n = int.Parse(Console.ReadLine());
-        int[] nums = new int[n];
-
-        for (int i = 0; i < n; i++)
+        int[] numbers = new int[n];
+        for(int i = 0; i < n; i++)
         {
-            nums[i] = int.Parse(Console.ReadLine());
+            numbers[i] = int.Parse(Console.ReadLine());
         }
 
-        Console.WriteLine(Lcm(nums));
-    }
+        var factors = Factorize(numbers[0]);
 
-    static int Gcd(int a, int b)
-    {
-        while (b != 0)
+        for (int i = 1; i < n; i++)
         {
-            int tmp = b;
-            b = a % b;
-            a = tmp;
-        }
-        return a;
-    }
+            var localFactors = Factorize(numbers[i]);
 
-    static int Lcm(int[] nums)
-    {
-        int lcm = nums[0];
+            foreach (var kvp in localFactors)
+            {
+                int factor = kvp.Key;
+                int power = kvp.Value;
 
-        for (int i = 1; i < nums.Length; i++)
-        {
-            int gcd = Gcd(lcm, nums[i]);
-            lcm = lcm * nums[i] / gcd;
+                if (factors.ContainsKey(factor))
+                {
+                    factors[factor] = Math.Max(factors[factor], power);
+                }
+                else
+                {
+                    factors[factor] = power;
+                }
+            }
         }
 
-        return lcm;
+        long lcm = 1;
+        foreach (var kvp in factors)
+        {
+            int factor = kvp.Key;
+            int power = kvp.Value;
+
+            for (int i = 0; i < power; i++)
+            {
+                lcm *= factor;
+            }
+        }
+
+        Console.WriteLine(lcm);
     }
 }
