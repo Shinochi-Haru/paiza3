@@ -1,24 +1,46 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 class MainClass
 {
+    static bool IsPrime(int x)
+    {
+        if (x == 0 || x == 1)
+        {
+            return false;
+        }
+
+        for (int i = 2; i * i <= x; i++)
+        {
+            if (x % i == 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void Main(string[] args)
     {
-        //long m1, m2, b1, b2;
-        //m1 = long.Parse(Console.ReadLine());
-        //m2 = long.Parse(Console.ReadLine());
-        //b1 = long.Parse(Console.ReadLine());
-        //b2 = long.Parse(Console.ReadLine());
-        var longArray = Console.ReadLine().Split().Select(long.Parse).ToArray();
-
-        for (long i = 0; i < longArray[1]; i++)
+        List<int> ans = new List<int>();
+        for (int i = 3; i * i <= 100000000; i += 2)
         {
-            long cand = longArray[0] * i + longArray[2];
-            if (cand % longArray[1] == longArray[3])
+            if (!IsPrime(i * i - 2))
             {
-                Console.WriteLine(cand);
-                return;
+                ans.Add(i * i);
+            }
+        }
+
+        if (ans.Count == 0)
+        {
+            Console.WriteLine("paiza's conjecture is correct.");
+        }
+        else
+        {
+            foreach (int a in ans)
+            {
+                Console.WriteLine(a);
             }
         }
     }
