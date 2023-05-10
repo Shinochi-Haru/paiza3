@@ -3,45 +3,34 @@ using System.Collections.Generic;
 
 class MainClass
 {
-    static bool IsPrime(int x)
+    static void ShellSort(int[] arr)
     {
-        if (x == 0 || x == 1)
+        int n = arr.Length;
+        int h = 1;
+
+        while (h < n / 3)
         {
-            return false;
+            h = 3 * h + 1;
         }
 
-        for (int i = 2; i * i <= x; i++)
+        while (h >= 1)
         {
-            if (x % i == 0)
+            for (int i = h; i < n; i++)
             {
-                return false;
+                for (int j = i; j >= h && arr[j] < arr[j - h]; j -= h)
+                {
+                    int temp = arr[j];
+                    arr[j] = arr[j - h];
+                    arr[j - h] = temp;
+                }
             }
+            h = h / 3;
         }
-
-        return true;
     }
+
 
     public static void Main(string[] args)
     {
-        List<int> ans = new List<int>();
-        for (int i = 3; i * i <= 100000000; i += 2)
-        {
-            if (!IsPrime(i * i - 2))
-            {
-                ans.Add(i * i);
-            }
-        }
-
-        if (ans.Count == 0)
-        {
-            Console.WriteLine("paiza's conjecture is correct.");
-        }
-        else
-        {
-            foreach (int a in ans)
-            {
-                Console.WriteLine(a);
-            }
-        }
+        
     }
 }
