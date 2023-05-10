@@ -8,7 +8,7 @@ class MainClass
     {
         var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
         List<string> nameList = new List<string>();
-        //List<int> iventList = new List<int>();
+        List<string> iventList = new List<string>();
 
         for(int i = 0; i < nums[0]; i++)
         {
@@ -17,7 +17,21 @@ class MainClass
 
         for(int i = 0; i < nums[1]; i++)
         {
-            string ivent = Console.ReadLine();
+            var ivent = Console.ReadLine();
+            if(ivent.Contains("join"))
+            {
+                var join = ivent.Split().ToArray();
+                nameList.Add(join[1]);
+                Console.WriteLine(nameList[i]);
+            }
+            else if(ivent.Contains("leave"))
+            {
+
+            }
+            else if (ivent.Contains("handsheak"))
+            {
+
+            }
         }
     }
 }
