@@ -22,17 +22,21 @@ class MainClass
             {
                 var join = ivent.Split().ToArray();
                 nameList.Add(join[1]);
-                Console.WriteLine(nameList[i]);
             }
             else if(ivent.Contains("leave"))
             {
                 var leave = ivent.Split().ToArray();
                 nameList.Remove(leave[1]);
             }
-            else if (ivent.Contains("handsheak"))
+            for (int j = 0; j < nameList.Count; j++)
             {
-                Console.WriteLine(nameList[i]);
+                 if (ivent.Contains("handshake"))
+                {
+                    nameList.Sort();
+                    Console.WriteLine(nameList[j]);
+                }
             }
         }
+        
     }
 }
