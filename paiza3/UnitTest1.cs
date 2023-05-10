@@ -1,41 +1,23 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 class MainClass
 {
-    static void ShellSort(int[] arr)
-    {
-        int n = arr.Length;
-        int h = 1;
-
-        while (h < n / 3)
-        {
-            h = 3 * h + 1;
-        }
-
-        while (h >= 1)
-        {
-            for (int i = h; i < n; i++)
-            {
-                for (int j = i; j >= h && arr[j] < arr[j - h]; j -= h)
-                {
-                    int temp = arr[j];
-                    arr[j] = arr[j - h];
-                    arr[j - h] = temp;
-                }
-            }
-            h = h / 3;
-        }
-    }
-
-
     public static void Main(string[] args)
     {
-        int[] intArray = new int[] { 1, 5, 8, 13, 9, 6, 34 };
+        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        List<string> nameList = new List<string>();
+        //List<int> iventList = new List<int>();
 
-        ShellSort(intArray);
+        for(int i = 0; i < nums[0]; i++)
+        {
+            nameList.Add(Console.ReadLine());
+        }
 
-        Console.WriteLine("Sorted Array:");
-        Console.WriteLine(string.Join(", ", intArray));
+        for(int i = 0; i < nums[1]; i++)
+        {
+            string ivent = Console.ReadLine();
+        }
     }
 }
