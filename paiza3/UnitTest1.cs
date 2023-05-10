@@ -31,6 +31,11 @@ class MainClass
 
     public static void Main(string[] args)
     {
-        
+        int[] intArray = new int[] { 1, 5, 8, 13, 9, 6, 34 };
+
+        ShellSort(intArray);
+
+        Console.WriteLine("Sorted Array:");
+        Console.WriteLine(string.Join(", ", intArray));
     }
 }
