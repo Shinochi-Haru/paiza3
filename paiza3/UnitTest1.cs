@@ -26,11 +26,12 @@ class MainClass
             }
             else if(ivent.Contains("leave"))
             {
-
+                var leave = ivent.Split().ToArray();
+                nameList.Remove(leave[1]);
             }
             else if (ivent.Contains("handsheak"))
             {
-
+                Console.WriteLine(nameList[i]);
             }
         }
     }
