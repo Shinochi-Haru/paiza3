@@ -7,36 +7,33 @@ class MainClass
     public static void Main(string[] args)
     {
         var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        List<string> nameList = new List<string>();
-        List<string> iventList = new List<string>();
+        SortedSet<string> nameSet = new SortedSet<string>();
 
-        for(int i = 0; i < nums[0]; i++)
+        for (int i = 0; i < nums[0]; i++)
         {
-            nameList.Add(Console.ReadLine());
+            nameSet.Add(Console.ReadLine());
         }
 
-        for(int i = 0; i < nums[1]; i++)
+        for (int i = 0; i < nums[1]; i++)
         {
             var ivent = Console.ReadLine();
-            if(ivent.Contains("join"))
+            if (ivent.Contains("join"))
             {
                 var join = ivent.Split().ToArray();
-                nameList.Add(join[1]);
+                nameSet.Add(join[1]);
             }
-            else if(ivent.Contains("leave"))
+            else if (ivent.Contains("leave"))
             {
                 var leave = ivent.Split().ToArray();
-                nameList.Remove(leave[1]);
+                nameSet.Remove(leave[1]);
             }
-            for (int j = 0; j < nameList.Count; j++)
+            else if (ivent.Contains("handshake"))
             {
-                 if (ivent.Contains("handshake"))
+                foreach (var name in nameSet)
                 {
-                    nameList.Sort();
-                    Console.WriteLine(nameList[j]);
+                    Console.WriteLine(name);
                 }
             }
         }
-        
     }
 }
