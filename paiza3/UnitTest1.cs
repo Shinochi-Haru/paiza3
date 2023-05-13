@@ -1,40 +1,45 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
-class MainClass
+class Program
 {
-    public static void Main(string[] args)
+    static void Main()
     {
         int N, K;
-        string[] S;
-        List<Tuple<int, string>> history;
+        N = Console.Read() - '0';
+        K = Console.Read() - '0';
 
-        // Input N, K and S[]
-        var input = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        N = input[0];
-        K = input[1];
-        S = new string[N];
+        List<string> company = new List<string>(N);
+        Dictionary<string, string> password = new Dictionary<string, string>();
+        Dictionary<string, int> deposit = new Dictionary<string, int>();
+
         for (int i = 0; i < N; i++)
         {
-            S[i] = Console.ReadLine();
+            int money;
+            string pass;
+            company.Add(Console.ReadLine());
+            pass = Console.ReadLine();
+            money = int.Parse(Console.ReadLine());
+            password[company[i]] = pass;
+            deposit[company[i]] = money;
         }
 
-        // Input history
-        history = new List<Tuple<int, string>>();
         for (int i = 0; i < K; i++)
         {
-            var line = Console.ReadLine().Split().ToArray();
-            var time = int.Parse(line[0]);
-            var str = line[1];
-            history.Add(Tuple.Create(time, str));
+            string g, m;
+            int p;
+            g = Console.ReadLine();
+            m = Console.ReadLine();
+            p = int.Parse(Console.ReadLine());
+            if (m == password[g])
+            {
+                deposit[g] -= p;
+            }
         }
 
-        // Sort history by time and output result
-        history.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-        foreach (var h in history)
+        for (int i = 0; i < N; i++)
         {
-            Console.WriteLine(h.Item2);
+            Console.WriteLine(company[i] + " " + deposit[company[i]]);
         }
     }
 }
