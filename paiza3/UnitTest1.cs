@@ -6,32 +6,39 @@ class MainClass
 {
     public static void Main(string[] args)
     {
-        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        SortedSet<string> nameSet = new SortedSet<string>();
+        var NK = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        var N = NK[0];
+        var K = NK[1];
 
-        for (int i = 0; i < nums[0]; i++)
+        SortedSet<string> member = new SortedSet<string>();
+        for (int i = 0; i < N; i++)
         {
-            nameSet.Add(Console.ReadLine());
+            string name = Console.ReadLine();
+            member.Add(name);
         }
 
-        for (int i = 0; i < nums[1]; i++)
+        for (int i = 0; i < K; i++)
         {
-            var ivent = Console.ReadLine();
-            if (ivent.Contains("join"))
+            string[] line = Console.ReadLine().Split();
+            var S = line[0];
+
+            if (S == "handshake")
             {
-                var join = ivent.Split().ToArray();
-                nameSet.Add(join[1]);
-            }
-            else if (ivent.Contains("leave"))
-            {
-                var leave = ivent.Split().ToArray();
-                nameSet.Remove(leave[1]);
-            }
-            else if (ivent.Contains("handshake"))
-            {
-                foreach (var name in nameSet)
+                foreach (var x in member)
                 {
-                    Console.WriteLine(name);
+                    Console.WriteLine(x);
+                }
+            }
+            else
+            {
+                var name = line[1];
+                if (S == "join")
+                {
+                    member.Add(name);
+                }
+                else
+                {
+                    member.Remove(name);
                 }
             }
         }
