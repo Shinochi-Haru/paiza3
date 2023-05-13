@@ -1,36 +1,36 @@
 using System;
 using System.Collections.Generic;
 
-class Program
+class MainClass
 {
-    static void Main()
+    public static void Main(string[] args)
     {
         int N, K;
-        N = Console.Read() - '0';
-        K = Console.Read() - '0';
+        string[] input = Console.ReadLine().Split(' ');
+        N = int.Parse(input[0]);
+        K = int.Parse(input[1]);
 
-        List<string> company = new List<string>(N);
+        List<string> company = new List<string>();
         Dictionary<string, string> password = new Dictionary<string, string>();
         Dictionary<string, int> deposit = new Dictionary<string, int>();
 
         for (int i = 0; i < N; i++)
         {
-            int money;
-            string pass;
-            company.Add(Console.ReadLine());
-            pass = Console.ReadLine();
-            money = int.Parse(Console.ReadLine());
-            password[company[i]] = pass;
-            deposit[company[i]] = money;
+            string[] data = Console.ReadLine().Split(' ');
+            string c = data[0];
+            string p = data[1];
+            int m = int.Parse(data[2]);
+            company.Add(c);
+            password[c] = p;
+            deposit[c] = m;
         }
 
         for (int i = 0; i < K; i++)
         {
-            string g, m;
-            int p;
-            g = Console.ReadLine();
-            m = Console.ReadLine();
-            p = int.Parse(Console.ReadLine());
+            string[] data = Console.ReadLine().Split(' ');
+            string g = data[0];
+            string m = data[1];
+            int p = int.Parse(data[2]);
             if (m == password[g])
             {
                 deposit[g] -= p;
