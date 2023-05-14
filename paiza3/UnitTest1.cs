@@ -1,41 +1,77 @@
-using System; // 標準ライブラリのSystemをインポート
-using System.Collections.Generic; // 標準ライブラリのSystem.Collections.Genericをインポート
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 class MainClass
 {
-    public static void Main(string[] args) // Mainメソッド
+    public static void Main(string[] args)
     {
-        int N, K; // 変数の宣言
-        string[] input = Console.ReadLine().Split(' '); // 標準入力から値を取得し、空白で分割した結果を配列に格納
-        N = int.Parse(input[0]); // 配列の1番目の要素をint型に変換して変数Nに格納
-        K = int.Parse(input[1]); // 配列の2番目の要素をint型に変換して変数Kに格納
+        int N = int.Parse(Console.ReadLine());
 
-        List<string> name = new List<string>(); // 名前を格納するリストを宣言
-        Dictionary<string, List<KeyValuePair<string, int>>> receipt = new Dictionary<string, List<KeyValuePair<string, int>>>(); // レシートを格納する辞書を宣言
+        // チャットに参加したメンバーを保持するリスト
+        List<string> membership = new List<string>();
+        // スーパーチャットの情報を保持するリスト
+        List<Tuple<long, string>> superchat = new List<Tuple<long, string>>();
+        // メンバーごとの受け取った金額の合計を保持する辞書
+        Dictionary<string, long> money_sum = new Dictionary<string, long>();
 
-        for (int i = 0; i < N; i++) // N回ループ
+        // 入力を受け取り、処理を行う
+        for (int i = 0; i < N; i++)
         {
-            name.Add(Console.ReadLine()); // 標準入力から名前を取得し、リストに追加
-            receipt.Add(name[i], new List<KeyValuePair<string, int>>()); // 辞書に名前をキーとして、空のリストを値として追加
-        }
+            string[] input = Console.ReadLine().Split();
+            string name = input[0];
+            string E = input[1];
 
-        for (int i = 0; i < K; i++) // K回ループ
-        {
-            string[] data = Console.ReadLine().Split(' '); // 標準入力から値を取得し、空白で分割した結果を配列に格納
-            string a = data[0]; // 配列の1番目の要素を変数aに格納
-            string p = data[1]; // 配列の2番目の要素を変数pに格納
-            int m = int.Parse(data[2]); // 配列の3番目の要素をint型に変換して変数mに格納
-            receipt[a].Add(new KeyValuePair<string, int>(p, m)); // 辞書のキーがaのリストに、商品名と金額を格納したKeyValuePairを追加
-        }
-
-        for (int i = 0; i < N; i++) // N回ループ
-        {
-            Console.WriteLine(name[i]); // 名前を出力
-            foreach (KeyValuePair<string, int> pm in receipt[name[i]]) // 名前をキーとしたリストの要素をループで取り出し
+            if (E == "give")
             {
-                Console.WriteLine(pm.Key + " " + pm.Value); // 商品名と金額を出力
+                // "give"の場合は、受け取った金額を加算する
+                long money = long.Parse(input[2]);
+                if (money_sum.ContainsKey(name))
+                {
+                    money_sum[name] += money;
+                }
+                else
+                {
+                    money_sum[name] = money;
+                }
             }
-            Console.WriteLine("-----"); // 区切り線を出力
+            else
+            {
+                // "join"の場合は、チャットに参加したメンバーとして登録する
+                membership.Add(name);
+            }
+        }
+
+        // スーパーチャットの情報を作成する
+        foreach (var item in money_sum)
+        {
+            superchat.Add(Tuple.Create(item.Value, item.Key));
+        }
+
+        // スーパーチャットの情報を並び替える（金額が多い順、同じ場合は名前の昇順）
+        superchat.Sort((x, y) =>
+        {
+            int result = y.Item1.CompareTo(x.Item1);
+            if (result == 0)
+            {
+                result = x.Item2.CompareTo(y.Item2);
+            }
+            return result;
+        });
+
+        // チャットに参加したメンバーを並び替える（名前の昇順）
+        membership.Sort();
+
+        // スーパーチャットの情報を出力する
+        foreach (var item in superchat)
+        {
+            Console.WriteLine(item.Item2);
+        }
+
+        // チャットに参加したメンバーを出力する
+        foreach (var item in membership)
+        {
+            Console.WriteLine(item);
         }
     }
 }
