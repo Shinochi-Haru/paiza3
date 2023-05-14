@@ -3,43 +3,46 @@ using System.Collections.Generic;
 
 class MainClass
 {
-    public static void Main(string[] args)
+    static void Main()
     {
         int N, K;
         string[] input = Console.ReadLine().Split(' ');
         N = int.Parse(input[0]);
         K = int.Parse(input[1]);
 
-        List<string> company = new List<string>();
-        Dictionary<string, string> password = new Dictionary<string, string>();
-        Dictionary<string, int> deposit = new Dictionary<string, int>();
+        List<string> name = new List<string>();
+        Dictionary<string, List<(string, int)>> receipt = new Dictionary<string, List<(string, int)>>();
 
         for (int i = 0; i < N; i++)
         {
-            string[] data = Console.ReadLine().Split(' ');
-            string c = data[0];
-            string p = data[1];
-            int m = int.Parse(data[2]);
-            company.Add(c);
-            password[c] = p;
-            deposit[c] = m;
+            name.Add(Console.ReadLine());
         }
 
         for (int i = 0; i < K; i++)
         {
             string[] data = Console.ReadLine().Split(' ');
-            string g = data[0];
-            string m = data[1];
-            int p = int.Parse(data[2]);
-            if (m == password[g])
+            string a = data[0];
+            string p = data[1];
+            int m = int.Parse(data[2]);
+
+            if (!receipt.ContainsKey(a))
             {
-                deposit[g] -= p;
+                receipt[a] = new List<(string, int)>();
             }
+            receipt[a].Add((p, m));
         }
 
-        for (int i = 0; i < N; i++)
+        foreach (string n in name)
         {
-            Console.WriteLine(company[i] + " " + deposit[company[i]]);
+            Console.WriteLine(n);
+            if (receipt.ContainsKey(n))
+            {
+                foreach ((string, int) item in receipt[n])
+                {
+                    Console.WriteLine($"{item.Item1} {item.Item2}");
+                }
+            }
+            Console.WriteLine("-----");
         }
     }
 }
