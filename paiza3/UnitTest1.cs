@@ -1,21 +1,26 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
 class Program
 {
     static void Main()
     {
-        int num = int.Parse(Console.ReadLine());
+        var num = int.Parse(Console.ReadLine());
+        List<string> data = new List<string>();
 
-        if (num >= 1 && num <= 5)
+        for (int i = 0; i < num; i++)
         {
-            Console.WriteLine("raw");
-        }
-        else if (num >= 6 && num <= 7)
-        {
-            Console.WriteLine("soft boiled");
-        }
-        else
-        {
-            Console.WriteLine("hard boiled");
+            var names = Console.ReadLine();
+            if(data.Contains(names))
+            {
+                data.Add("NO");
+            }
+            else
+            {
+                data.Add("YES");
+            }
+            Console.WriteLine(data[i]);
         }
     }
 }
