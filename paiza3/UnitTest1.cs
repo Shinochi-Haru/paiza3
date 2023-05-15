@@ -5,25 +5,75 @@ class Program
 {
     static void Main()
     {
-        var num = int.Parse(Console.ReadLine());
-        List<string> data = new List<string>();
-        HashSet<string> names = new HashSet<string>();
+        string[] input = Console.ReadLine().Split();
+        int n = int.Parse(input[0]);
+        int m = int.Parse(input[1]);
 
-        for (int i = 0; i < num; i++)
+        string[] pixels = new string[n];
+        for (int i = 0; i < n; i++)
         {
-            string name = Console.ReadLine();
+            pixels[i] = Console.ReadLine();
+        }
 
-            if (names.Contains(name))
+        // ‚’¼‚ÉÜ‚è‚½‚½‚ÞÛ
+        bool isLineSymmetry1 = true;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
             {
-                data.Add("NO");
+                if (pixels[i][j] != pixels[i][m - j - 1])
+                {
+                    isLineSymmetry1 = false;
+                    break;
+                }
             }
-            else
-            {
-                data.Add("YES");
-                names.Add(name);
-            }
+        }
 
-            Console.WriteLine(data[i]);
+        // …•½‚ÉÜ‚è‚½‚½‚ÞÛ
+        bool isLineSymmetry2 = true;
+        for (int j = 0; j < m; j++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                if (pixels[i][j] != pixels[n - i - 1][j])
+                {
+                    isLineSymmetry2 = false;
+                    break;
+                }
+            }
+        }
+
+        bool isLineSymmetry = isLineSymmetry1 || isLineSymmetry2;
+
+        // “_‘ÎÌ
+        bool isPointSymmetry = true;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (pixels[i][j] != pixels[n - i - 1][m - j - 1])
+                {
+                    isPointSymmetry = false;
+                    break;
+                }
+            }
+        }
+
+        if (isLineSymmetry && isPointSymmetry)
+        {
+            Console.WriteLine("line point symmetry");
+        }
+        else if (isLineSymmetry)
+        {
+            Console.WriteLine("line symmetry");
+        }
+        else if (isPointSymmetry)
+        {
+            Console.WriteLine("point symmetry");
+        }
+        else
+        {
+            Console.WriteLine("none");
         }
     }
 }
