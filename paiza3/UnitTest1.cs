@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 class Program
 {
@@ -8,18 +7,22 @@ class Program
     {
         var num = int.Parse(Console.ReadLine());
         List<string> data = new List<string>();
+        HashSet<string> names = new HashSet<string>();
 
         for (int i = 0; i < num; i++)
         {
-            var names = Console.ReadLine();
-            if(data.Contains(names))
+            string name = Console.ReadLine();
+
+            if (names.Contains(name))
             {
                 data.Add("NO");
             }
             else
             {
                 data.Add("YES");
+                names.Add(name);
             }
+
             Console.WriteLine(data[i]);
         }
     }
