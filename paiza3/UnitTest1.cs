@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 public class Program
 {
@@ -15,10 +16,9 @@ public class Program
 
     public static void Main(string[] args)
     {
-        int num1 = 48;
-        int num2 = 36;
-        int gcd = EuclideanAlgorithm(num1, num2);
+        var num = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        int gcd = EuclideanAlgorithm(num[0], num[1]);
 
-        Console.WriteLine("Å‘åŒö–ñ”: " + gcd);
+        Console.WriteLine(gcd);
     }
 }
