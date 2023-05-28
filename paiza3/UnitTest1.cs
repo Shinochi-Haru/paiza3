@@ -1,40 +1,34 @@
 using System;
 using System.Linq;
 
-public class Program
+class Program
 {
-    public static int EuclideanAlgorithm(int a, int b)
+    static void Main()
+    {
+        int input = int.Parse(Console.ReadLine());
+        int[] numbers = new int[input];
+        for (int i = 0; i < input; i++)
+        {
+            numbers[i] = int.Parse(Console.ReadLine());
+        }
+
+        int result = numbers[0];
+        for (int i = 1; i < numbers.Length; i++)
+        {
+            result = GetGCD(result, numbers[i]);
+        }
+
+        Console.WriteLine("Å‘åŒö–ñ”: " + result);
+    }
+
+    static int GetGCD(int a, int b)
     {
         while (b != 0)
         {
-            int remainder = a % b;
-            a = b;
-            b = remainder;
+            int temp = b;
+            b = a % b;
+            a = temp;
         }
         return a;
-    }
-
-    public static int GcdOfMultipleNumbers(params int[] numbers)
-    {
-        if (numbers.Length < 2)
-        {
-            throw new ArgumentException("At least two numbers are required.");
-        }
-
-        int gcd = numbers[0];
-        for (int i = 1; i < numbers.Length; i++)
-        {
-            gcd = EuclideanAlgorithm(gcd, numbers[i]);
-        }
-
-        return gcd;
-    }
-
-    public static void Main(string[] args)
-    {
-        var input = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        int gcd = GcdOfMultipleNumbers(input);
-
-        Console.WriteLine(gcd);
     }
 }
