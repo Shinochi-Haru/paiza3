@@ -5,20 +5,10 @@ class Program
 {
     static void Main()
     {
-        int input = int.Parse(Console.ReadLine());
-        int[] numbers = new int[input];
-        for (int i = 0; i < input; i++)
-        {
-            numbers[i] = int.Parse(Console.ReadLine());
-        }
-
-        int result = numbers[0];
-        for (int i = 1; i < numbers.Length; i++)
-        {
-            result = GetGCD(result, numbers[i]);
-        }
-
-        Console.WriteLine("Å‘åŒö–ñ”: " + result);
+        var input = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        int gcd = GetGCD(input[0],input[1]);
+        int lcm = (input[0] * input[1]) / gcd;
+        Console.WriteLine(lcm);
     }
 
     static int GetGCD(int a, int b)
