@@ -14,10 +14,26 @@ public class Program
         return a;
     }
 
+    public static int GcdOfMultipleNumbers(params int[] numbers)
+    {
+        if (numbers.Length < 2)
+        {
+            throw new ArgumentException("At least two numbers are required.");
+        }
+
+        int gcd = numbers[0];
+        for (int i = 1; i < numbers.Length; i++)
+        {
+            gcd = EuclideanAlgorithm(gcd, numbers[i]);
+        }
+
+        return gcd;
+    }
+
     public static void Main(string[] args)
     {
-        var num = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        int gcd = EuclideanAlgorithm(num[0], num[1]);
+        var input = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        int gcd = GcdOfMultipleNumbers(input);
 
         Console.WriteLine(gcd);
     }
