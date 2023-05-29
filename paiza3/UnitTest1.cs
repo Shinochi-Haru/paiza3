@@ -1,42 +1,58 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 class Program
 {
+    static List<int>[] adList;
+    static int[] minPath;
+    static int t;
     static void Main()
     {
-        // 入力を受け取り、nとsに値を割り当てる
-        string[] input1 = Console.ReadLine().Split();
-        int n = int.Parse(input1[0]);
-        int s = int.Parse(input1[1]);
+        // 入力を受け取る
+        int[] input = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        int n = input[0]; // 頂点の数
+        int s = input[1]; // 始点
+        t = input[2]; // 終点
 
-        // n回のループで処理を行う
-        for (int i = 0; i < n; i++)
+        // 隣接リストを作成する
+        adList = new List<int>[n + 1];
+        for (int i = 1; i <= n; i++)
         {
-            // vを受け取り、aに配列として格納する
             int v = int.Parse(Console.ReadLine());
-            int[] a = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
-
-            // sとi+1が等しい場合、最大値を出力してループを終了する
-            if (s == i + 1)
-            {
-                int max = GetMaxValue(a);
-                Console.WriteLine(max);
-                break;
-            }
+            adList[i] = Console.ReadLine().Split().Select(int.Parse).ToList();
         }
+
+        // 最短パスを初期化する
+        minPath = Enumerable.Range(1, n + 1).ToArray();
+
+        // 深さ優先探索を実行する
+        DFS(s, new List<int> { s });
+
+        // 結果を出力する
+        Console.WriteLine(string.Join(" ", minPath));
     }
 
-    // 配列の最大値を求めるメソッド
-    static int GetMaxValue(int[] array)
+    static void DFS(int v, List<int> path)
     {
-        int max = array[0];
-        for (int i = 1; i < array.Length; i++)
+        if (path.Count < minPath.Length)
         {
-            if (array[i] > max)
+            foreach (int i in adList[v])
             {
-                max = array[i];
+                if (!path.Contains(i))
+                {
+                    path.Add(i);
+                    if (i == t)
+                    {
+                        minPath = path.ToArray();
+                    }
+                    else
+                    {
+                        DFS(i, path);
+                    }
+                    path.RemoveAt(path.Count - 1);
+                }
             }
         }
-        return max;
     }
 }
