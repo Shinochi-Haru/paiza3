@@ -4,9 +4,10 @@ using System.Linq;
 
 class Program
 {
-    static List<int>[] adList;
+    static Dictionary<int, List<int>> adList;
     static int[] minPath;
     static int t;
+    static int p;
     static void Main()
     {
         // 入力を受け取る
@@ -14,9 +15,10 @@ class Program
         int n = input[0]; // 頂点の数
         int s = input[1]; // 始点
         t = input[2]; // 終点
+        p = input[3]; // p
 
         // 隣接リストを作成する
-        adList = new List<int>[n + 1];
+        adList = new Dictionary<int, List<int>>();
         for (int i = 1; i <= n; i++)
         {
             int v = int.Parse(Console.ReadLine());
@@ -30,7 +32,14 @@ class Program
         DFS(s, new List<int> { s });
 
         // 結果を出力する
-        Console.WriteLine(string.Join(" ", minPath));
+        if (minPath.Length == n + 1)
+        {
+            Console.WriteLine(-1);
+        }
+        else
+        {
+            Console.WriteLine(string.Join(" ", minPath));
+        }
     }
 
     static void DFS(int v, List<int> path)
@@ -42,7 +51,7 @@ class Program
                 if (!path.Contains(i))
                 {
                     path.Add(i);
-                    if (i == t)
+                    if (i == t && path.Contains(p))
                     {
                         minPath = path.ToArray();
                     }
