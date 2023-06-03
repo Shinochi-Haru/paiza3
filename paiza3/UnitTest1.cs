@@ -1,23 +1,31 @@
 using System;
 using System.Linq;
 
-public class QuickSort
+public class InsertionSort
 {
     public static void Main()
     {
-        var num = Console.ReadLine();
+        int n = int.Parse(Console.ReadLine());
         var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        for (int i = 0; i < nums.Length; i++)
+        InsertionSortAlgorithm(nums, n);
+    }
+
+    private static void InsertionSortAlgorithm(int[] a, int n)
+    {
+        for (int i = 1; i < n; i++)
         {
-            int key = nums[i];
-            int j = nums.Length - 1;
-            while (j >= 0 && nums[j] > key)
+            for (int j = i; j > 0 && a[j - 1] > a[j]; j--)
             {
-                nums[j + 1] = nums[j];
-                j--;
+                Swap(ref a[j - 1], ref a[j]);
             }
-            nums[j + 1] = key;
-            Console.WriteLine(nums[i]);
+            Console.WriteLine(string.Join(" ", a));
         }
+    }
+
+    private static void Swap(ref int a, ref int b)
+    {
+        int temp = a;
+        a = b;
+        b = temp;
     }
 }
