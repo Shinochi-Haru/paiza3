@@ -1,31 +1,72 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
-public class InsertionSort
+public class Program
 {
-    public static void Main()
+    static Dictionary<int, List<int>> adjacencyList = new Dictionary<int, List<int>>();
+    static List<List<int>> paths = new List<List<int>>();
+    static int n, s, t, k;
+    static HashSet<int> S = new HashSet<int>();
+    static void Main(string[] args)
     {
-        int n = int.Parse(Console.ReadLine());
-        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        InsertionSortAlgorithm(nums, n);
-    }
+        string[] input = Console.ReadLine().Split();
+        n = int.Parse(input[0]);
+        s = int.Parse(input[1]);
+        t = int.Parse(input[2]);
+        k = int.Parse(Console.ReadLine());
 
-    private static void InsertionSortAlgorithm(int[] a, int n)
-    {
-        for (int i = 1; i < n; i++)
+        S = new HashSet<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse));
+
+        for (int i = 1; i <= n; i++)
         {
-            for (int j = i; j > 0 && a[j - 1] > a[j]; j--)
+            int v = int.Parse(Console.ReadLine());
+            adjacencyList[i] = new List<int>();
+
+            string[] vertices = Console.ReadLine().Split();
+            foreach (string vertex in vertices)
             {
-                Swap(ref a[j - 1], ref a[j]);
+                int neighbor = int.Parse(vertex);
+                adjacencyList[i].Add(neighbor);
             }
-            Console.WriteLine(string.Join(" ", a));
+        }
+
+        foreach (int i in S)
+        {
+            foreach (int j in adjacencyList[i])
+            {
+                adjacencyList[j].Remove(i);
+            }
+            adjacencyList[i].Clear();
+        }
+
+        DFS(s, new List<int> { s });
+
+        Console.WriteLine(paths.Count);
+        foreach (List<int> path in paths)
+        {
+            Console.WriteLine(string.Join(" ", path));
         }
     }
 
-    private static void Swap(ref int a, ref int b)
+    static void DFS(int v, List<int> path)
     {
-        int temp = a;
-        a = b;
-        b = temp;
+        foreach (int neighbor in adjacencyList[v])
+        {
+            if (!path.Contains(neighbor))
+            {
+                path.Add(neighbor);
+
+                if (neighbor == t)
+                {
+                    paths.Add(new List<int>(path));
+                }
+                else
+                {
+                    DFS(neighbor, path);
+                }
+
+                path.RemoveAt(path.Count - 1);
+            }
+        }
     }
 }
