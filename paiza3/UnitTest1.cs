@@ -1,71 +1,66 @@
 using System;
 using System.Collections.Generic;
 
-public class Program
+class Program
 {
-    static Dictionary<int, List<int>> adjacencyList = new Dictionary<int, List<int>>();
-    static List<List<int>> paths = new List<List<int>>();
-    static int n, s, t, k;
-    static HashSet<int> S = new HashSet<int>();
+    static Dictionary<int, List<int>> adjacencyList; // —×ÚƒŠƒXƒg
+    static List<int> maxTrail; // Å’·Œo˜H
+
     static void Main(string[] args)
     {
+        // “ü—Í‚ğó‚¯æ‚èA•Ï”‚ÉŠi”[
         string[] input = Console.ReadLine().Split();
-        n = int.Parse(input[0]);
-        s = int.Parse(input[1]);
-        t = int.Parse(input[2]);
-        k = int.Parse(Console.ReadLine());
+        int n = int.Parse(input[0]); // ƒm[ƒh”
+        int s = int.Parse(input[1]); // n“_
+        int t = int.Parse(input[2]); // I“_
 
-        S = new HashSet<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse));
-
+        // —×ÚƒŠƒXƒg‚Ìì¬
+        adjacencyList = new Dictionary<int, List<int>>();
         for (int i = 1; i <= n; i++)
         {
             int v = int.Parse(Console.ReadLine());
-            adjacencyList[i] = new List<int>();
-
-            string[] vertices = Console.ReadLine().Split();
-            foreach (string vertex in vertices)
-            {
-                int neighbor = int.Parse(vertex);
-                adjacencyList[i].Add(neighbor);
-            }
+            int[] neighbors = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+            adjacencyList[i] = new List<int>(neighbors);
         }
 
-        foreach (int i in S)
-        {
-            foreach (int j in adjacencyList[i])
-            {
-                adjacencyList[j].Remove(i);
-            }
-            adjacencyList[i].Clear();
-        }
+        // Å’·Œo˜H‚ğŠi”[‚·‚éƒŠƒXƒg‚Ì‰Šú‰»
+        maxTrail = new List<int>();
 
-        DFS(s, new List<int> { s });
+        // [‚³—Dæ’Tõ‚ÌÀs
+        DFS(s, new List<int> { s }, new List<Tuple<int, int>>(), t);
 
-        Console.WriteLine(paths.Count);
-        foreach (List<int> path in paths)
-        {
-            Console.WriteLine(string.Join(" ", path));
-        }
+        // Œ‹‰Ê‚ğo—Í
+        Console.WriteLine(string.Join(" ", maxTrail));
     }
 
-    static void DFS(int v, List<int> path)
+    // [‚³—Dæ’Tõ‚ÌŠÖ”
+    static void DFS(int v, List<int> trail, List<Tuple<int, int>> edges, int t)
     {
-        foreach (int neighbor in adjacencyList[v])
+        foreach (int i in adjacencyList[v])
         {
-            if (!path.Contains(neighbor))
+            Tuple<int, int> e = Tuple.Create(Math.Min(i, v), Math.Max(i, v));
+
+            if (!edges.Contains(e))
             {
-                path.Add(neighbor);
+                trail.Add(i);
 
-                if (neighbor == t)
+                if (i != trail[0])
                 {
-                    paths.Add(new List<int>(path));
-                }
-                else
-                {
-                    DFS(neighbor, path);
+                    edges.Add(e);
+
+                    if (i == t && trail.Count > maxTrail.Count)
+                    {
+                        maxTrail = new List<int>(trail);
+                    }
+                    else
+                    {
+                        DFS(i, trail, edges, t);
+                    }
+
+                    edges.Remove(e);
                 }
 
-                path.RemoveAt(path.Count - 1);
+                trail.RemoveAt(trail.Count - 1);
             }
         }
     }
