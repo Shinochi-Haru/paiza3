@@ -8,6 +8,7 @@ class Program
     static List<int> maxTrail; // 最長経路
     static int s; // 始点
     static int t; // 終点
+    static int p; // 特定の値
 
     static void Main(string[] args)
     {
@@ -16,6 +17,7 @@ class Program
         int n = int.Parse(input[0]); // ノード数
         s = int.Parse(input[1]); // 始点
         t = int.Parse(input[2]); // 終点
+        p = int.Parse(input[3]); // 特定の値
 
         // 隣接リストの作成
         adjacencyList = new Dictionary<int, List<int>>();
@@ -33,7 +35,14 @@ class Program
         DFS(s, new List<int> { s }, new List<List<int>>());
 
         // 結果を出力
-        Console.WriteLine(string.Join(" ", maxTrail));
+        if (maxTrail.Count == 0)
+        {
+            Console.WriteLine(-1);
+        }
+        else
+        {
+            Console.WriteLine(string.Join(" ", maxTrail));
+        }
     }
 
     // 深さ優先探索の関数
@@ -48,7 +57,7 @@ class Program
                 trail.Add(i);
                 edges.Add(e);
 
-                if (i == t && trail.Count > maxTrail.Count)
+                if (i == t && CountValue(maxTrail, p) < CountValue(trail, p))
                 {
                     maxTrail = new List<int>(trail);
                 }
@@ -73,5 +82,19 @@ class Program
         }
 
         return false;
+    }
+
+    // リスト内の特定の値の数を数える関数
+    static int CountValue(List<int> list, int value)
+    {
+        int count = 0;
+        foreach (int num in list)
+        {
+            if (num == value)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 }
