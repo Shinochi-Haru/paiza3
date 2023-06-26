@@ -1,100 +1,58 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 class Program
 {
-    static Dictionary<int, List<int>> adjacencyList; // 隣接リスト
-    static List<int> maxTrail; // 最長経路
-    static int s; // 始点
-    static int t; // 終点
-    static int p; // 特定の値
+    static int count = 0;
 
-    static void Main(string[] args)
+    static void QuickSort(int[] a, int left, int right)
     {
-        // 入力を受け取り、変数に格納
-        string[] input = Console.ReadLine().Split();
-        int n = int.Parse(input[0]); // ノード数
-        s = int.Parse(input[1]); // 始点
-        t = int.Parse(input[2]); // 終点
-        p = int.Parse(input[3]); // 特定の値
-
-        // 隣接リストの作成
-        adjacencyList = new Dictionary<int, List<int>>();
-        for (int i = 1; i <= n; i++)
+        if (left + 1 >= right)
         {
-            int v = int.Parse(Console.ReadLine());
-            int[] neighbors = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            adjacencyList[i] = new List<int>(neighbors);
+            return;
         }
 
-        // 最長経路を格納するリストの初期化
-        maxTrail = new List<int>();
+        int pivot = a[right - 1];
 
-        // 深さ優先探索の実行
-        DFS(s, new List<int> { s }, new List<List<int>>());
-
-        // 結果を出力
-        if (maxTrail.Count == 0)
+        int cur_index = left;
+        for (int i = left; i < right - 1; i++)
         {
-            Console.WriteLine(-1);
-        }
-        else
-        {
-            Console.WriteLine(string.Join(" ", maxTrail));
-        }
-    }
-
-    // 深さ優先探索の関数
-    static void DFS(int v, List<int> trail, List<List<int>> edges)
-    {
-        foreach (int i in adjacencyList[v])
-        {
-            List<int> e = new List<int>() { Math.Min(i, v), Math.Max(i, v) };
-
-            if (!ContainsEdge(edges, e))
+            if (a[i] < pivot)
             {
-                trail.Add(i);
-                edges.Add(e);
-
-                if (i == t && CountValue(maxTrail, p) < CountValue(trail, p))
-                {
-                    maxTrail = new List<int>(trail);
-                }
-
-                DFS(i, trail, edges);
-
-                edges.Remove(e);
-                trail.RemoveAt(trail.Count - 1);
-            }
-        }
-    }
-
-    // 辺のリストに指定された辺が含まれているかを判定する関数
-    static bool ContainsEdge(List<List<int>> edges, List<int> e)
-    {
-        foreach (List<int> edge in edges)
-        {
-            if (edge[0] == e[0] && edge[1] == e[1])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // リスト内の特定の値の数を数える関数
-    static int CountValue(List<int> list, int value)
-    {
-        int count = 0;
-        foreach (int num in list)
-        {
-            if (num == value)
-            {
+                Swap(ref a[cur_index], ref a[i]);
+                cur_index++;
                 count++;
             }
         }
-        return count;
+
+        Swap(ref a[cur_index], ref a[right - 1]);
+
+        QuickSort(a, left, cur_index);
+        QuickSort(a, cur_index + 1, right);
+    }
+
+    static void Swap(ref int a, ref int b)
+    {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+
+    static void Main()
+    {
+        int n = int.Parse(Console.ReadLine());
+
+        var a = Console.ReadLine().Split().Select(int.Parse).ToArray();
+
+        QuickSort(a, 0, n);
+
+        for (int i = 0; i < n; i++)
+        {
+            if (i > 0) Console.Write(" ");
+            Console.Write(a[i]);
+        }
+        Console.WriteLine();
+
+        Console.WriteLine(count);
     }
 }
