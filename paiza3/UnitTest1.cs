@@ -1,58 +1,43 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-
 class Program
 {
-    static int count = 0;
-
-    static void QuickSort(int[] a, int left, int right)
-    {
-        if (left + 1 >= right)
-        {
-            return;
-        }
-
-        int pivot = a[right - 1];
-
-        int cur_index = left;
-        for (int i = left; i < right - 1; i++)
-        {
-            if (a[i] < pivot)
-            {
-                Swap(ref a[cur_index], ref a[i]);
-                cur_index++;
-                count++;
-            }
-        }
-
-        Swap(ref a[cur_index], ref a[right - 1]);
-
-        QuickSort(a, left, cur_index);
-        QuickSort(a, cur_index + 1, right);
-    }
-
-    static void Swap(ref int a, ref int b)
-    {
-        int temp = a;
-        a = b;
-        b = temp;
-    }
-
     static void Main()
     {
-        int n = int.Parse(Console.ReadLine());
+        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        int count = 0;
+        List<int> trail = new List<int>();
 
-        var a = Console.ReadLine().Split().Select(int.Parse).ToArray();
-
-        QuickSort(a, 0, n);
-
-        for (int i = 0; i < n; i++)
+        for(int i = 0; i < nums[0]; i++)
         {
-            if (i > 0) Console.Write(" ");
-            Console.Write(a[i]);
+            int v = int.Parse(Console.ReadLine());
+            var edges = Console.ReadLine().Split().Select(int.Parse).ToList();
+            DFS(v, trail, edges, nums[2]);
+            count++;
         }
-        Console.WriteLine();
+        for(int j = 0; j < nums[1]; j++)
+        {
+            Console.WriteLine(string.Join(" ",trail));
+        }
+    }
 
-        Console.WriteLine(count);
+    static void DFS(int v, List<int> trail,List<int> edges, int k)
+    {
+        List<int> numList = new List<int>();
+        for(int i = 0; i < v; i++)
+        {
+            if (k == 0)
+            {
+                numList.Add(trail[i]);
+            }
+            else if(k != 0)
+            {
+                edges.Add(i);
+                DFS(i, trail, edges, k - 1);
+                numList.Remove(i);
+                edges.Remove(i);
+            }
+        }
     }
 }
