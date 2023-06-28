@@ -3,41 +3,88 @@ using System.Collections.Generic;
 using System.Linq;
 class Program
 {
+    enum State
+    {
+        Floar,
+        Wall,
+        Start,
+        Goal,
+        Open,
+        Close
+    }
+    static private State _currentState;
+    static int[,] grid = new int[5, 5];
     static void Main()
     {
-        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
-        int count = 0;
-        List<int> trail = new List<int>();
+        _currentState = State.Start;
 
-        for(int i = 0; i < nums[0]; i++)
+        switch (_currentState)
         {
-            int v = int.Parse(Console.ReadLine());
-            var edges = Console.ReadLine().Split().Select(int.Parse).ToList();
-            DFS(v, trail, edges, nums[2]);
-            count++;
+            case State.Start:
+                UpdateStartState();
+                break;
+            case State.Floar:
+
+                break;
+            case State.Wall:
+                //UpdateChaseState();
+                break;
+            case State.Goal:
+                //UpdateChaseState();
+                break;
+            case State.Open:
+                //UpdateChaseState();
+                break;
+            case State.Close:
+                //UpdateChaseState();
+                break;
         }
-        for(int j = 0; j < nums[1]; j++)
+
+
+        // Fill the grid with numbers
+        for (int row = 0; row < 5; row++)
         {
-            Console.WriteLine(string.Join(" ",trail));
+            for (int col = 0; col < 5; col++)
+            {
+                grid[row, col] = (row * 5) + (col + 1);
+            }
+        }
+
+        // Display the grid
+        for (int row = 0; row < 5; row++)
+        {
+            for (int col = 0; col < 5; col++)
+            {
+                Console.Write(grid[row, col] + "\t");
+            }
+            Console.WriteLine();
+        }
+
+        // C#のコンソールに5×5のグリットを出力したい
+        Console.ReadLine();
+    }
+
+    static void UpdateStartState()
+    {
+        if (_currentState == State.Floar)
+        {
+            _currentState = State.Open;
+        }
+        else if (_currentState == State.Wall)
+        {
+            _currentState = State.Close;
         }
     }
 
-    static void DFS(int v, List<int> trail,List<int> edges, int k)
+    static void UpdateFloarState()
     {
-        List<int> numList = new List<int>();
-        for(int i = 0; i < v; i++)
+        if (_currentState == State.Wall)
         {
-            if (k == 0)
-            {
-                numList.Add(trail[i]);
-            }
-            else if(k != 0)
-            {
-                edges.Add(i);
-                DFS(i, trail, edges, k - 1);
-                numList.Remove(i);
-                edges.Remove(i);
-            }
+            _currentState = State.Close;
+        }
+        else if (_currentState == State.Floar)
+        {
+            _currentState = State.Open;
         }
     }
 }
