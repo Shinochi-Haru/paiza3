@@ -1,311 +1,88 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 class Program
 {
-    enum State
-    {
-        Floar,
-        Wall,
-        Start,
-        Goal,
-        Open,
-        Close
-    }
-    static private State _currentState;
-    static int[,] grid = new int[5, 5];
-    static void Main()
-    {
-        _currentState = State.Start;
+    static Dictionary<int, List<int>> ad_list = new Dictionary<int, List<int>>();
+    static List<List<int>> trails = new List<List<int>>();
+    static int s = 0;
+    static int t = 0;
 
-        switch (_currentState)
-        {
-            case State.Start:
-                UpdateStartState();
-                break;
-            case State.Floar:
-                UpdateFloarState();
-                break;
-            case State.Wall:
-                break;
-            case State.Goal:
-                //UpdateChaseState();
-                break;
-            case State.Open:
-                UpdateOpenState();
-                break;
-            case State.Close:
-                UpdateCloseState();
-                break;
-        }
-        var maze = CreateMaze();
-        var bfs = new MazeDfs(maze);
-        bfs.Search();
-        bfs.DebugPrint(maze);
-    }
-
-    static void UpdateStartState()
+    static void Main(string[] args)
     {
-        if (_currentState == State.Floar)
+        // 入力を読み込む
+        string[] input = Console.ReadLine().Split();
+        int n = int.Parse(input[0]); // 頂点の数
+        s = int.Parse(input[1]); // 開始頂点
+        t = int.Parse(input[2]); // 目標頂点
+
+        // 隣接リストを構築する
+        for (int i = 1; i <= n; i++)
         {
-            _currentState = State.Open;
+            int v = int.Parse(Console.ReadLine()); // 頂点の値
+            ad_list[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 隣接する頂点のリスト
         }
-        else if (_currentState == State.Wall)
+
+        // DFSを実行してトレイルを生成する
+        DFS(s, new List<int> { s }, new List<List<int>>());
+
+        // トレイルの数とトレイルの内容を出力する
+        Console.WriteLine(trails.Count);
+        foreach (var trail in trails)
         {
-            _currentState = State.Close;
+            Console.WriteLine(string.Join(" ", trail));
         }
     }
 
-    static void UpdateFloarState()
+    static void DFS(int v, List<int> trail, List<List<int>> edges)
     {
-        if (_currentState == State.Wall)
+        foreach (int i in ad_list[v])
         {
-            _currentState = State.Close;
-        }
-        else if (_currentState == State.Floar)
-        {
-            _currentState = State.Open;
-        }
-    }
-    static void UpdateOpenState()
-    {
-        if (_currentState == State.Wall)
-        {
-            _currentState = State.Close;
-        }
-        else if (_currentState == State.Floar)
-        {
-            _currentState = State.Open;
-        }
-    }
-    static void UpdateCloseState()
-    {
-
-    }
-    public static int[,] CreateMaze()
-    {
-        return new int[15, 15] {
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,0,0,0,1,0,0,0,0,0,0,0,0,0,1},
-                {1,1,1,0,1,1,1,0,1,1,1,0,1,0,1},
-                {1,0,1,0,0,0,1,0,0,0,1,0,1,0,1},
-                {1,0,1,1,1,0,1,1,1,0,1,0,1,1,1},
-                {1,0,1,0,0,0,0,0,0,0,1,0,0,0,1},
-                {1,0,1,0,1,1,1,1,1,1,1,1,1,0,1},
-                {1,0,0,0,0,0,0,0,1,0,1,0,0,0,1},
-                {1,1,1,1,1,0,1,0,1,0,1,0,1,1,1},
-                {1,0,0,0,1,0,1,0,0,0,1,0,0,0,1},
-                {1,0,1,0,1,0,1,1,1,0,1,1,1,1,1},
-                {1,0,1,0,1,0,0,0,1,0,1,0,0,0,1},
-                {1,0,1,0,1,1,1,0,1,0,1,0,1,0,1},
-                {1,0,1,0,0,0,0,0,1,0,0,0,1,0,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-            };
-    }
-
-    public class MazeDfs
-    {
-        private int[,] Maze;            // 迷路
-        private int[] VisitedArray;     // 訪問済配列
-        private Cell Start;             // 迷路スタート
-        private Cell Goal;              // 迷路ゴール
-
-        // 迷路の横幅
-        private int MazeWidth
-        {
-            get { return this.Maze.GetLength(0); }
-        }
-
-        // 迷路の高さ
-        private int MazeHeight
-        {
-            get { return this.Maze.GetLength(1); }
-        }
-
-        // コンストラクタ
-        public MazeDfs(int[,] maze)
-        {
-            this.Maze = maze;
-            this.VisitedArray = new int[MazeWidth * MazeHeight];
-            this.Start = new Cell(1, 1);
-            this.Goal = new Cell(MazeWidth - 2, MazeHeight - 2);
-        }
-
-        // 探索処理
-        public void Search()
-        {
-            var isGoaled = false;
-            var queue = new Stack<Cell>();
-            queue.Push(Start);
-
-            // 訪問済配列を -1 で初期化
-            VisitedArray = Enumerable.Repeat(-1, VisitedArray.Length).ToArray();
-            VisitedArray[ToIndex(Start)] = ToIndex(Start);
-
-            // 探索待ちのセルがなくなるまで続ける
-            while (queue.Count > 0 && !isGoaled)
+            List<int> e = new List<int>(new int[] { i, v });
+            e.Sort(); // 辺をソートして重複を防ぐ
+            if (!ContainsList(edges, e)) // 既に追加されていない辺の場合のみ探索を続ける
             {
-                // 探索対象のセルを取り出す
-                var target = queue.Pop();
-
-                // 対象のセルから上下左右のセルを探索する
-                foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+                trail.Add(i); // トレイルに頂点を追加
+                if (i != s)
                 {
-                    // 次の探索セルを作成する
-                    var nextCell = new Cell(target.X, target.Y);
-                    switch (dir)
+                    edges.Add(e); // 辺を追加
+                    if (i == t)
                     {
-                        case Direction.Up:
-                            nextCell.Y -= 1;
-                            break;
-                        case Direction.Right:
-                            nextCell.X += 1;
-                            break;
-                        case Direction.Down:
-                            nextCell.Y += 1;
-                            break;
-                        case Direction.Left:
-                            nextCell.X -= 1;
-                            break;
+                        trails.Add(new List<int>(trail)); // 目標頂点に到達したらトレイルを追加
                     }
-                    // 探索候補セルが範囲内
-                    if (nextCell.X >= 0 && nextCell.Y >= 0 && nextCell.X < MazeWidth && nextCell.Y < MazeHeight)
+                    else
                     {
-                        // 未探索の場合かつ通路の場合のみキューに詰めると同時に探索済情報設定
-                        if (VisitedArray[ToIndex(nextCell)] < 0
-                            && Maze[nextCell.X, nextCell.Y] == Path)
-                        {
-                            // 探索済情報
-                            SetVisited(target, nextCell);
-                            if (nextCell.X == Goal.X && nextCell.Y == Goal.Y)
-                            {
-                                // 探索候補がゴールの場合すぐに抜けるために探索候補を削除して抜ける
-                                // console.log('ゴールが見つかりました。おめでとう ...');
-                                queue.Clear();
-                                queue.Push(nextCell);
-                                isGoaled = true;
-                                break;
-                            }
-                            else
-                            {
-                                // キューに詰める
-                                queue.Push(nextCell);
-                            }
-                        }
+                        DFS(i, trail, edges); // 再帰的に探索を続ける
+                    }
+                    edges.RemoveAt(edges.Count - 1); // 探索が終わったら辺を削除
+                }
+                trail.RemoveAt(trail.Count - 1); // 探索が終わったら頂点を削除
+            }
+        }
+    }
+
+    static bool ContainsList(List<List<int>> list1, List<int> list2)
+    {
+        // リストの比較を行うヘルパーメソッド
+        foreach (var item in list1)
+        {
+            if (item.Count == list2.Count)
+            {
+                bool equal = true;
+                for (int i = 0; i < item.Count; i++)
+                {
+                    if (item[i] != list2[i])
+                    {
+                        equal = false;
+                        break;
                     }
                 }
-            }
-            // 探索結果を配列に設定
-            if (isGoaled)
-            {
-                SetRoute();
-            }
-        }
-
-        // ゴールへのルートを2次元配列に設定
-        public void SetRoute()
-        {
-            // 訪問済の配列からゴールまでのルートを設定する
-            var startIndex = ToIndex(Start);
-            var goalIndex = ToIndex(Goal);
-            var beforeIndex = VisitedArray[goalIndex];
-            var route = new List<int>();
-
-            while (beforeIndex >= 0 && beforeIndex != startIndex)
-            {
-                // ゴールからスタートへのルートをたどる
-                route.Add(beforeIndex);
-                beforeIndex = VisitedArray[beforeIndex];
-            }
-
-            // ゴールへのルートを設定
-            foreach (var index in route)
-            {
-                var cell = ToCell(index);
-                Maze[cell.X, cell.Y] = Route;
-            }
-        }
-
-        // 訪問済データの設定を行う
-        private void SetVisited(Cell fromCell, Cell toCell)
-        {
-            var fromIndex = ToIndex(fromCell);
-            var toIndex = ToIndex(toCell);
-            VisitedArray[toIndex] = fromIndex;
-        }
-
-        // Cellを1次元配列のインデックスに変換
-        private int ToIndex(Cell cell)
-        {
-            return cell.X + MazeWidth * cell.Y;
-        }
-
-        // 1次元配列のインデックスをセルに変換
-        private Cell ToCell(int index)
-        {
-            return new Cell(index % MazeWidth, index / MazeWidth);
-        }
-
-        // 通路・壁情報
-        const int Path = 0;
-        const int Wall = 1;
-        const int Route = 99;
-
-        // セル情報
-        private struct Cell
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-            public Cell(int x, int y)
-            {
-                this.X = x;
-                this.Y = y;
-            }
-        }
-
-        // 方向
-        private enum Direction
-        {
-            Up = 0,
-            Right = 1,
-            Down = 2,
-            Left = 3
-        }
-
-        // デバッグ用処理
-        public void DebugPrint(int[,] maze)
-        {
-            var text = string.Empty;
-            Console.WriteLine($"Width: {maze.GetLength(0)}");
-            Console.WriteLine($"Height: {maze.GetLength(1)}");
-            for (int y = 0; y < maze.GetLength(1); y++)
-            {
-                for (int x = 0; x < maze.GetLength(0); x++)
+                if (equal)
                 {
-                    if (x == Start.X && y == Start.Y)
-                    {
-                        text += "S ";
-                    }
-                    else if (x == Goal.X && y == Goal.Y)
-                    {
-                        text += " G";
-                    }
-                    else if (maze[x, y] == Path)
-                    {
-                        text += "  ";
-                    }
-                    else if (maze[x, y] == Wall)
-                    {
-                        text += "##";
-                    }
-                    else if (maze[x, y] == Route)
-                    {
-                        text += "..";
-                    }
+                    return true;
                 }
-                text += "\r\n";
             }
-            Console.WriteLine(text);
         }
+        return false;
     }
 }
