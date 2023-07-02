@@ -5,16 +5,18 @@ class Program
 {
     static Dictionary<int, List<int>> ad_list = new Dictionary<int, List<int>>();
     static List<List<int>> trails = new List<List<int>>();
-    static int s = 0;
     static int t = 0;
 
     static void Main(string[] args)
     {
         // 入力を読み込む
-        string[] input = Console.ReadLine().Split();
-        int n = int.Parse(input[0]); // 頂点の数
-        s = int.Parse(input[1]); // 開始頂点
-        t = int.Parse(input[2]); // 目標頂点
+        string[] input1 = Console.ReadLine().Split();
+        int n = int.Parse(input1[0]); // 頂点の数
+        int s = int.Parse(input1[1]); // 開始頂点
+        t = int.Parse(input1[2]); // 目標頂点
+
+        int k = int.Parse(Console.ReadLine()); // 削除する頂点の数
+        HashSet<int> S = new HashSet<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 削除する頂点の集合
 
         // 隣接リストを構築する
         for (int i = 1; i <= n; i++)
@@ -23,10 +25,20 @@ class Program
             ad_list[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 隣接する頂点のリスト
         }
 
+        // 頂点の削除
+        foreach (int i in S)
+        {
+            foreach (int j in ad_list[i])
+            {
+                ad_list[j].Remove(i); // iに隣接する頂点からiを削除
+            }
+            ad_list[i].Clear(); // i自体を削除
+        }
+
         // DFSを実行してトレイルを生成する
         DFS(s, new List<int> { s }, new List<List<int>>());
 
-        // トレイルの数とトレイルの内容を出力する
+        // 目標頂点に到達するトレイルの数とトレイルの内容を出力する
         Console.WriteLine(trails.Count);
         foreach (var trail in trails)
         {
@@ -43,19 +55,13 @@ class Program
             if (!ContainsList(edges, e)) // 既に追加されていない辺の場合のみ探索を続ける
             {
                 trail.Add(i); // トレイルに頂点を追加
-                if (i != s)
+                edges.Add(e); // 辺を追加
+                if (i == t)
                 {
-                    edges.Add(e); // 辺を追加
-                    if (i == t)
-                    {
-                        trails.Add(new List<int>(trail)); // 目標頂点に到達したらトレイルを追加
-                    }
-                    else
-                    {
-                        DFS(i, trail, edges); // 再帰的に探索を続ける
-                    }
-                    edges.RemoveAt(edges.Count - 1); // 探索が終わったら辺を削除
+                    trails.Add(new List<int>(trail)); // 目標頂点に到達した場合、トレイルを追加
                 }
+                DFS(i, trail, edges); // 再帰的に探索を続ける
+                edges.RemoveAt(edges.Count - 1); // 探索が終わったら辺を削除
                 trail.RemoveAt(trail.Count - 1); // 探索が終わったら頂点を削除
             }
         }
