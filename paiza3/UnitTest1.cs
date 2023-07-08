@@ -1,94 +1,60 @@
 using System;
-using System.Collections.Generic;
-
-class Program
+using System.Linq;
+public class AdjacencyMatrix
 {
-    static Dictionary<int, List<int>> ad_list = new Dictionary<int, List<int>>();
-    static List<List<int>> trails = new List<List<int>>();
-    static int t = 0;
+    private int[,] matrix;
+    private int numVertices;
 
-    static void Main(string[] args)
+    static void Main()
     {
-        // 入力を読み込む
-        string[] input1 = Console.ReadLine().Split();
-        int n = int.Parse(input1[0]); // 頂点の数
-        int s = int.Parse(input1[1]); // 開始頂点
-        t = int.Parse(input1[2]); // 目標頂点
+        string[] input = Console.ReadLine().Split();
+        int numVertices = int.Parse(input[0]);
+        int numEdges = int.Parse(input[1]);
 
-        int k = int.Parse(Console.ReadLine()); // 削除する頂点の数
-        HashSet<int> S = new HashSet<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 削除する頂点の集合
+        AdjacencyMatrix matrix = new AdjacencyMatrix(numVertices);
 
-        // 隣接リストを構築する
-        for (int i = 1; i <= n; i++)
+        for (int i = 0; i < numEdges; i++)
         {
-            int v = int.Parse(Console.ReadLine()); // 頂点の値
-            ad_list[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 隣接する頂点のリスト
+            string[] edgeInput = Console.ReadLine().Split();
+            int source = int.Parse(edgeInput[0]) - 1;
+            int destination = int.Parse(edgeInput[1]) - 1;
+
+            matrix.AddEdge(source, destination);
         }
 
-        // 頂点の削除
-        foreach (int i in S)
+        // 隣接行列の出力
+        for (int i = 0; i < numVertices; i++)
         {
-            foreach (int j in ad_list[i])
+            for (int j = 0; j < numVertices; j++)
             {
-                ad_list[j].Remove(i); // iに隣接する頂点からiを削除
+                Console.Write(matrix.HasEdge(i, j) ? "1" : "0");
             }
-            ad_list[i].Clear(); // i自体を削除
-        }
-
-        // DFSを実行してトレイルを生成する
-        DFS(s, new List<int> { s }, new List<List<int>>());
-
-        // 目標頂点に到達するトレイルの数とトレイルの内容を出力する
-        Console.WriteLine(trails.Count);
-        foreach (var trail in trails)
-        {
-            Console.WriteLine(string.Join(" ", trail));
+            Console.WriteLine();
         }
     }
-
-    static void DFS(int v, List<int> trail, List<List<int>> edges)
+    public AdjacencyMatrix(int numVertices)
     {
-        foreach (int i in ad_list[v])
-        {
-            List<int> e = new List<int>(new int[] { i, v });
-            e.Sort(); // 辺をソートして重複を防ぐ
-            if (!ContainsList(edges, e)) // 既に追加されていない辺の場合のみ探索を続ける
-            {
-                trail.Add(i); // トレイルに頂点を追加
-                edges.Add(e); // 辺を追加
-                if (i == t)
-                {
-                    trails.Add(new List<int>(trail)); // 目標頂点に到達した場合、トレイルを追加
-                }
-                DFS(i, trail, edges); // 再帰的に探索を続ける
-                edges.RemoveAt(edges.Count - 1); // 探索が終わったら辺を削除
-                trail.RemoveAt(trail.Count - 1); // 探索が終わったら頂点を削除
-            }
-        }
+        this.numVertices = numVertices;
+        matrix = new int[numVertices, numVertices];
     }
 
-    static bool ContainsList(List<List<int>> list1, List<int> list2)
+    public void AddEdge(int source, int destination)
     {
-        // リストの比較を行うヘルパーメソッド
-        foreach (var item in list1)
-        {
-            if (item.Count == list2.Count)
-            {
-                bool equal = true;
-                for (int i = 0; i < item.Count; i++)
-                {
-                    if (item[i] != list2[i])
-                    {
-                        equal = false;
-                        break;
-                    }
-                }
-                if (equal)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        // 無向グラフの場合、両方の方向にエッジを追加する
+        matrix[source, destination] = 1;
+        matrix[destination, source] = 1;
+    }
+
+    public void RemoveEdge(int source, int destination)
+    {
+        // エッジを削除する
+        matrix[source, destination] = 0;
+        matrix[destination, source] = 0;
+    }
+
+    public bool HasEdge(int source, int destination)
+    {
+        // エッジが存在するかどうかを判定する
+        return matrix[source, destination] == 1;
     }
 }
