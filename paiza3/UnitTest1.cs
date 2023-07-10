@@ -1,17 +1,18 @@
 using System;
-using System.Linq;
-public class AdjacencyMatrix
+using System.Collections.Generic;
+
+public class AdjacencyList
 {
-    private int[,] matrix;
+    private List<List<int>> adjacencyList;
     private int numVertices;
 
-    static void Main()
+    public static void Main()
     {
         string[] input = Console.ReadLine().Split();
         int numVertices = int.Parse(input[0]);
         int numEdges = int.Parse(input[1]);
 
-        AdjacencyMatrix matrix = new AdjacencyMatrix(numVertices);
+        AdjacencyList adjacencyList = new AdjacencyList(numVertices);
 
         for (int i = 0; i < numEdges; i++)
         {
@@ -19,42 +20,50 @@ public class AdjacencyMatrix
             int source = int.Parse(edgeInput[0]) - 1;
             int destination = int.Parse(edgeInput[1]) - 1;
 
-            matrix.AddEdge(source, destination);
+            adjacencyList.AddEdge(source, destination);
         }
 
-        // 隣接行列の出力
+        // 隣接リストの出力
         for (int i = 0; i < numVertices; i++)
         {
-            for (int j = 0; j < numVertices; j++)
+            foreach (int neighbor in adjacencyList.GetNeighbors(i))
             {
-                Console.Write(matrix.HasEdge(i, j) ? "1" : "0");
+                Console.Write(neighbor + 1);
             }
             Console.WriteLine();
         }
     }
-    public AdjacencyMatrix(int numVertices)
+
+    public AdjacencyList(int numVertices)
     {
         this.numVertices = numVertices;
-        matrix = new int[numVertices, numVertices];
+        adjacencyList = new List<List<int>>(numVertices);
+
+        for (int i = 0; i < numVertices; i++)
+        {
+            adjacencyList.Add(new List<int>());
+        }
     }
 
     public void AddEdge(int source, int destination)
     {
-        // 無向グラフの場合、両方の方向にエッジを追加する
-        matrix[source, destination] = 1;
-        matrix[destination, source] = 1;
+        adjacencyList[source].Add(destination);
+        adjacencyList[destination].Add(source);
     }
 
     public void RemoveEdge(int source, int destination)
     {
-        // エッジを削除する
-        matrix[source, destination] = 0;
-        matrix[destination, source] = 0;
+        adjacencyList[source].Remove(destination);
+        adjacencyList[destination].Remove(source);
     }
 
     public bool HasEdge(int source, int destination)
     {
-        // エッジが存在するかどうかを判定する
-        return matrix[source, destination] == 1;
+        return adjacencyList[source].Contains(destination);
+    }
+
+    public List<int> GetNeighbors(int vertex)
+    {
+        return adjacencyList[vertex];
     }
 }
