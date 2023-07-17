@@ -1,36 +1,36 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 class Program
 {
     static void Main()
     {
-        int num = int.Parse(Console.ReadLine());
+        int n = int.Parse(Console.ReadLine());
 
-        List<int> intList = new List<int>();
+        bool hasTripleCrown = false;
+        bool hasDoubleCrown = false;
 
-        for (int i = 1; i < num; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (int j = i + 1; j <= num; j++)
-            {
-                int gcd = GetGCD(i, j);
-                intList.Add(gcd);
-            }
+            string[] data = Console.ReadLine().Split(' ');
+            double battingAverage = double.Parse(data[0]);
+            int runsBattedIn = int.Parse(data[1]);
+            int homeRuns = int.Parse(data[2]);
+
+            if (battingAverage >= 0.3 && runsBattedIn >= 100 && homeRuns >= 30)
+                hasTripleCrown = true;
+            else if (battingAverage >= 0.3 && runsBattedIn >= 100)
+                hasDoubleCrown = true;
+            else if (battingAverage >= 0.3 && homeRuns >= 30)
+                hasDoubleCrown = true;
+            else if (runsBattedIn >= 100 && homeRuns >= 30)
+                hasDoubleCrown = true;
         }
 
-        int maxGCD = intList.Max();
-        Console.WriteLine(maxGCD);
-    }
-
-    static int GetGCD(int a, int b)
-    {
-        while (b != 0)
-        {
-            int remainder = a % b;
-            a = b;
-            b = remainder;
-        }
-        return a;
+        if (hasTripleCrown)
+            Console.WriteLine("Triple");
+        else if (hasDoubleCrown)
+            Console.WriteLine("Double");
+        else
+            Console.WriteLine("Nobody");
     }
 }
