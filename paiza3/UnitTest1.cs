@@ -1,59 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+//‘o•ûŒü˜AŒ‹ƒŠƒXƒg
 class Program
 {
-    static Dictionary<int, List<int>> adjacencyList;
+    private static int[] numArray;
+    private static int count;
 
-    static void Main()
+    private static void CustomList()
     {
-        int n, k;
-        string[] input = Console.ReadLine().Split(' ');
-        n = int.Parse(input[0]);
-        k = int.Parse(input[1]);
-
-        adjacencyList = new Dictionary<int, List<int>>();
-
-        // —×ÚƒŠƒXƒg‚Ìì¬
-        for (int i = 1; i <= n; i++)
-        {
-            int v = int.Parse(Console.ReadLine());
-            adjacencyList[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(' '), int.Parse));
-        }
-
-        HashSet<int> notVisited = new HashSet<int>(Enumerable.Range(1, n));
-
-        // –¢–K–â‚Ì’¸“_‚ğ’Tõ‚µ‚Ä˜AŒ‹¬•ª‚ğ”»’è
-        while (notVisited.Count > 0)
-        {
-            int v = notVisited.First();
-            List<int> connectedComp = DFS(v, new List<int>() { v });
-
-            if (connectedComp.Count > k)
-            {
-                Console.WriteLine("No");
-                return;
-            }
-
-            notVisited.ExceptWith(connectedComp);
-        }
-
-        Console.WriteLine("Yes");
+        numArray = new int[4];
+        count = 0;
     }
 
-    // [‚³—Dæ’TõiDFSj‚ğs‚¤ŠÖ”
-    static List<int> DFS(int v, List<int> connectedComp)
+    private static void AddList()
     {
-        foreach (int i in adjacencyList[v])
+        count++;
+        if(count == numArray.Length)
         {
-            if (!connectedComp.Contains(i))
-            {
-                connectedComp.Add(i);
-                DFS(i, connectedComp);
-            }
+            int[] array = new int[count];
+            Array.Copy(numArray, array, numArray.Length);
+            numArray = array;
         }
+    }
 
-        return connectedComp;
+    private static void RemoveList()
+    {
+        count--;
+        if(count == numArray.Length)
+        {
+            int[] removeArray = new int[count];
+            Array.Copy(numArray, removeArray, numArray.Length);
+            numArray = removeArray;
+        }
+    }
+
+    private static void SwapList()
+    {
+
+    }
+
+    private static void Sort()
+    {
+
     }
 }
