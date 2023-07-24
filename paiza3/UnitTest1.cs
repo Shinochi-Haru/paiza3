@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 class Program
 {
-    static Dictionary<int, List<int>> adjList; // 隣接リストを保持する辞書
-    static List<Tuple<int, int>> tree; // 全域木の辺を保持するリスト
+    static Dictionary<int, List<int>> adjList;
+    static List<Tuple<int, int>> tree;
 
     public static void Main(string[] args)
     {
@@ -19,13 +19,33 @@ class Program
             adjList[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 隣接する頂点の番号をリストとして保存
         }
 
+        int k = int.Parse(Console.ReadLine()); // 削除する辺の数
+
+        // 辺を削除
+        for (int i = 0; i < k; i++)
+        {
+            int e, d;
+            string[] input = Console.ReadLine().Split();
+            e = int.Parse(input[0]);
+            d = int.Parse(input[1]);
+            adjList[e].Remove(d);
+            adjList[d].Remove(e);
+        }
+
         // 開始頂点を1としてDFSを実行し、全域木を構築する
         DFS(1, new List<int>() { 1 });
 
-        // 全域木の辺を出力
-        foreach (var edge in tree)
+        // 枝の数が n - 1 ならば全域木を出力、それ以外は -1 を出力
+        if (tree.Count == n - 1)
         {
-            Console.WriteLine($"{edge.Item1} {edge.Item2}");
+            foreach (var edge in tree)
+            {
+                Console.WriteLine($"{edge.Item1} {edge.Item2}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("-1");
         }
     }
 
