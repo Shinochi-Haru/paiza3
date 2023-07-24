@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 class Program
 {
@@ -8,7 +9,9 @@ class Program
 
     public static void Main(string[] args)
     {
-        int n = int.Parse(Console.ReadLine());
+        int n = int.Parse(Console.ReadLine()); // 頂点数
+        int k = int.Parse(Console.ReadLine()); // 削除する頂点数
+        HashSet<int> S = new HashSet<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 削除する頂点の集合
         adjList = new Dictionary<int, List<int>>();
         tree = new List<Tuple<int, int>>();
 
@@ -19,24 +22,23 @@ class Program
             adjList[i] = new List<int>(Array.ConvertAll(Console.ReadLine().Split(), int.Parse)); // 隣接する頂点の番号をリストとして保存
         }
 
-        int k = int.Parse(Console.ReadLine()); // 削除する辺の数
-
-        // 辺を削除
-        for (int i = 0; i < k; i++)
+        // 削除する辺を処理
+        foreach (int i in S)
         {
-            int e, d;
-            string[] input = Console.ReadLine().Split();
-            e = int.Parse(input[0]);
-            d = int.Parse(input[1]);
-            adjList[e].Remove(d);
-            adjList[d].Remove(e);
+            foreach (int j in adjList[i])
+            {
+                adjList[j].Remove(i); // 隣接する頂点から削除する頂点を削除
+            }
+            adjList[i].Clear(); // 削除する頂点を隣接リストから削除
         }
 
-        // 開始頂点を1としてDFSを実行し、全域木を構築する
-        DFS(1, new List<int>() { 1 });
+        HashSet<int> vertices = new HashSet<int>(Enumerable.Range(1, n).Where(x => !S.Contains(x))); // 削除されていない頂点の集合
 
-        // 枝の数が n - 1 ならば全域木を出力、それ以外は -1 を出力
-        if (tree.Count == n - 1)
+        // 開始頂点を削除されていない頂点の中で最小のものとしてDFSを実行し、全域木を構築する
+        DFS(vertices.Min(), new List<int>() { vertices.Min() });
+
+        // 全域木の辺の数が n - k - 1 ならば全域木を出力、それ以外は -1 を出力
+        if (tree.Count == n - k - 1)
         {
             foreach (var edge in tree)
             {
