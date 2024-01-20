@@ -4,33 +4,27 @@ class Program
 {
     static void Main()
     {
-        int n = int.Parse(Console.ReadLine());
-        int[] m = new int[n];
-
-        for (int i = 0; i < n; i++)
+        var num = int.Parse(Console.ReadLine());
+        char[] arrChar = new char[num];
+        for (int i = 0; i < num; i++)
         {
-            m[i] = int.Parse(Console.ReadLine());
+            arrChar[i] = char.Parse(Console.ReadLine());
         }
-
-        int maxProfit = 0;
-        int buyDay = 0;
-        int sellDay = 0;
-
-        for (int i = 0; i < n; i++)
+        var num2 = int.Parse(Console.ReadLine());
+        for (int j = 0; j < num2; j++)
         {
-            for (int j = i + 1; j < n; j++)
+            string s = Console.ReadLine();
+            foreach(char c in arrChar)
             {
-                int profit = m[j] - m[i];
-                if (profit > maxProfit)
+                if(s.Contains(c.ToString()))
                 {
-                    maxProfit = profit;
-                    buyDay = i + 1;  // 1-based index
-                    sellDay = j + 1; // 1-based index
+                    Console.WriteLine("YES");
+                }
+                else
+                {
+                    Console.WriteLine("NO");
                 }
             }
         }
-
-        Console.WriteLine(buyDay);
-        Console.WriteLine(sellDay);
     }
 }
