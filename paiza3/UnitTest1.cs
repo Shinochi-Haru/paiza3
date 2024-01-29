@@ -1,30 +1,29 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 class Program
 {
     static void Main()
     {
         var num = int.Parse(Console.ReadLine());
-        char[] arrChar = new char[num];
+        List<string> log = new List<string>();
+        //string[] log = new string[num];
+        string word;
         for (int i = 0; i < num; i++)
         {
-            arrChar[i] = char.Parse(Console.ReadLine());
-        }
-        var num2 = int.Parse(Console.ReadLine());
-        for (int j = 0; j < num2; j++)
-        {
-            string s = Console.ReadLine();
-            foreach(char c in arrChar)
+            word = Console.ReadLine();
+            if (log.Contains(word))
             {
-                if(s.Contains(c.ToString()))
-                {
-                    Console.WriteLine("YES");
-                }
-                else
-                {
-                    Console.WriteLine("NO");
-                }
+                log.Remove(word);
             }
+            // æ“ª‚É’Ç‰Á
+            log.Insert(0, word);
+        }
+
+        for (int i = 0; i < log.Count; i++)
+        {
+            Console.WriteLine(log[i]);
         }
     }
 }
